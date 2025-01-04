@@ -1,3 +1,9 @@
+const TILE_SIZE = 50;
+const TILE_MARGIN = 10;
+const NUM_TILES = 5;
+// Calculate the total width of the game board
+const BOARD_WIDTH = TILE_SIZE * NUM_TILES + TILE_MARGIN * (NUM_TILES - 1);
+
 class GameBoard extends HTMLElement {
     constructor() {
         super();
@@ -7,14 +13,14 @@ class GameBoard extends HTMLElement {
         template.innerHTML = `
             <style>
                 :host {
-                    width: 290px;
-                    height: 290px;
-                    border: 2px solid red;
+                    width: ${BOARD_WIDTH}px;
+                    height: auto; /* maintain aspect ratio */
+                    border: 2px solid blue;
                 }
                 :host([type="grid"]) {
                     display: grid;
-                    grid-template-columns: repeat(5, 50px);
-                    grid-template-rows: repeat(5, 50px);
+                    grid-template-columns: repeat(5, ${TILE_SIZE}px);
+                    grid-template-rows: repeat(5, ${TILE_SIZE});
                     gap: 10px;
                 }
             </style>
@@ -24,8 +30,7 @@ class GameBoard extends HTMLElement {
         // Render children based on type
         if (type === 'triangle') {
             const div = document.createElement('div');
-            div.style.width = 290;
-            div.style.height = 290;
+
             this.shadowRoot.appendChild(div);
             for (let row = 1; row <= 5; row++) {
                 const boardRow = document.createElement('board-row');
@@ -76,8 +81,8 @@ class BoardSquare extends HTMLElement {
             <style>
                 :host {
                     display: block;
-                    width: 50px;
-                    height: 50px;
+                    width: ${TILE_SIZE};
+                    height: ${TILE_SIZE};
                     background-color: tan;
                     margin-right: 10px;
                 }
