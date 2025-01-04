@@ -1,0 +1,14 @@
+body {
+    background-color: #fcfcfc;
+}
+
+header {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#tile-place {
+    background-color: yellow;
+    display: flex;
+}
