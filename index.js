@@ -34,6 +34,7 @@ class GameBoard extends HTMLElement {
             for (let row = 1; row <= 5; row++) {
                 const boardRow = document.createElement('board-row');
                 boardRow.setAttribute('squares', row);
+                boardRow.setAttribute('row-index', row - 1)
                 div.appendChild(boardRow);
             }
         } else if (type === 'grid') {
@@ -50,6 +51,8 @@ class BoardRow extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         const squares = parseInt(this.getAttribute('squares'), 10) || 1;
+        const rowIndex = this.getAttribute('row-index');
+
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -66,6 +69,7 @@ class BoardRow extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         for (let i = 0; i < squares; i++) {
             const square = document.createElement('board-square');
+            square.setAttribute('row-index', rowIndex)
             this.shadowRoot.appendChild(square);
         }
     }
@@ -75,6 +79,9 @@ class BoardSquare extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+        const rowIndex = parseInt(this.getAttribute('row-index'), 10);
+        const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
+        const squareColor = colors[rowIndex];
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -83,6 +90,7 @@ class BoardSquare extends HTMLElement {
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
                     border: 2px solid var(--dark);
+                    background-color: ${squareColor};
                     margin-right: 10px;
                 }
                 :host(:last-child) {
