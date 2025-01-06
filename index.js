@@ -15,7 +15,6 @@ class GameBoard extends HTMLElement {
                 :host {
                     width: ${BOARD_WIDTH}px;
                     height: auto; /* maintain aspect ratio */
-                    border: 2px solid blue;
                 }
                 :host([type="grid"]) {
                     display: grid;
@@ -83,7 +82,7 @@ class BoardSquare extends HTMLElement {
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
-                    background-color: tan;
+                    border: 2px solid var(--dark);
                     margin-right: 10px;
                 }
                 :host(:last-child) {

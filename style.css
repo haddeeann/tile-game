@@ -1,3 +1,16 @@
+/*#ffb7c5*/
+/*#a5dee5*/
+/*#ffedd3*/
+/*#f7d9c4*/
+/*#3d405b*/
+:root {
+    --pink: rgb(255,183,197);
+    --blue: rgb(165,222,229);
+    --yellow: rgb(255,237,211);
+    --tan: rgb(247,217,196);
+    --dark: rgb(61,64,91);
+}
+
 body {
     background-color: #fcfcfc;
 }
@@ -13,5 +26,4 @@ header {
     gap: 5vw;
     justify-content: center;
     align-items: center;
-    background-color: yellow;
 }
