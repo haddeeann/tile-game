@@ -8,6 +8,8 @@
     --blue: rgb(165,222,229);
     --yellow: rgb(255,237,211);
     --tan: rgb(247,217,196);
+    --lightest: rgba(61,64,91, 0.10);
+    --light: rgba(61,64,91, 0.25);
     --med: rgba(61,64,91, 0.5);
     --dark: rgb(61,64,91);
 }
@@ -27,4 +29,50 @@ header {
     gap: 5vw;
     justify-content: center;
     align-items: center;
+}
+#tile-circles {
+    border: 2px solid var(--lightest);
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding: 25px;
+}
+.circle {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    border: 1px solid var(--light);
+    background-color: var(--lightest);
+    position: relative;
+}
+.tile {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+.pink {
+    top: 25px;
+    right: 20px;
+    background-color: var(--pink);
+}
+.blue {
+    bottom: 25px;
+    left: 22px;
+    background-color: var(--blue);
+}
+.yellow {
+    top: 24px;
+    left: 23px;
+    background-color: var(--yellow);
+}
+.tan {
+    bottom: 26px;
+    right: 19px;
+    background-color: var(--tan);
+}
+.dark {
+    bottom: 50px;
+    right: 50px;
+    background-color: var(--dark);
 }
