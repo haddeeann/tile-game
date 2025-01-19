@@ -33,8 +33,8 @@ class GameBoard extends HTMLElement {
             this.shadowRoot.appendChild(div);
             for (let row = 1; row <= 5; row++) {
                 const boardRow = document.createElement('board-row');
-                boardRow.setAttribute('squares', row);
-                boardRow.setAttribute('row-index', row - 1)
+                boardRow.setAttribute('squares', String(row));
+                boardRow.setAttribute('row-index', String(row - 1));
                 div.appendChild(boardRow);
             }
         } else if (type === 'grid') {
@@ -89,7 +89,7 @@ class BoardSquare extends HTMLElement {
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
-                    border: 2px solid var(--dark);
+                    border: 2px solid var(--dark-gray);
                     background-color: ${squareColor};
                     margin-right: 10px;
                 }

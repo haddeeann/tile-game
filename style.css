@@ -4,14 +4,18 @@
 /*#f7d9c4*/
 /*#3d405b*/
 :root {
-    --pink: rgb(255,183,197);
-    --blue: rgb(165,222,229);
-    --yellow: rgb(255,237,211);
-    --tan: rgb(247,217,196);
+    --dark-pink: hsl(348.33, 100%, 70%);
+    --pink: hsl(348.33, 100%, 88%);
+    --dark-blue: hsl(186.56, 55.17%, 50%);
+    --blue: hsl(186.56, 55.17%, 77.25%);
+    --dark-yellow: hsl(35.45, 100%, 81.37%);
+    --yellow: hsl(35.45, 100%, 91.37%);
+    --dark-tan: hsl(24.71, 76.12%, 86.86%);
+    --tan: hsl(24.71, 76.12%, 86.86%);
     --lightest: rgba(61,64,91, 0.10);
     --light: rgba(61,64,91, 0.25);
     --med: rgba(61,64,91, 0.5);
-    --dark: rgb(61,64,91);
+    --dark-gray: rgb(61,64,91);
 }
 
 body {
@@ -51,28 +55,28 @@ header {
     height: 30px;
     position: absolute;
 }
-.pink {
+.dark-pink {
     top: 25px;
     right: 20px;
-    background-color: var(--pink);
+    background-color: var(--dark-pink);
 }
-.blue {
+.dark-blue {
     bottom: 25px;
     left: 22px;
-    background-color: var(--blue);
+    background-color: var(--dark-blue);
 }
-.yellow {
+.dark-yellow {
     top: 24px;
     left: 23px;
-    background-color: var(--yellow);
+    background-color: var(--dark-yellow);
 }
-.tan {
+.dark-tan {
     bottom: 26px;
     right: 19px;
-    background-color: var(--tan);
+    background-color: var(--dark-tan);
 }
-.dark {
+.dark-gray {
     bottom: 50px;
     right: 50px;
-    background-color: var(--dark);
+    background-color: var(--dark-gray);
 }
