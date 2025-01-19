@@ -44,39 +44,62 @@ header {
 }
 .circle {
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     border: 1px solid var(--light);
     background-color: var(--lightest);
     position: relative;
 }
+/* tile size 50px */
 .tile {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     position: absolute;
 }
+.tile:first-child {
+    top: 35px;
+    right: 35px;
+}
+.tile:nth-child(2) {
+    bottom: 35px;
+    left: 35px;
+}
+.tile:nth-child(3) {
+    top: 35px;
+    left: 35px;
+}
+.tile:nth-child(4) {
+    bottom: 35px;
+    right: 35px;
+}
+.tile:nth-child(5) {
+    bottom: 75px;
+    right: 75px;
+}
 .dark-pink {
-    top: 25px;
-    right: 20px;
     background-color: var(--dark-pink);
 }
 .dark-blue {
-    bottom: 25px;
-    left: 22px;
     background-color: var(--dark-blue);
 }
 .dark-yellow {
-    top: 24px;
-    left: 23px;
     background-color: var(--dark-yellow);
 }
 .dark-tan {
-    bottom: 26px;
-    right: 19px;
     background-color: var(--dark-tan);
 }
 .dark-gray {
-    bottom: 50px;
-    right: 50px;
     background-color: var(--dark-gray);
+}
+
+#game-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#game-buttons button:hover {
+    cursor: pointer;
 }
