@@ -28,13 +28,13 @@ header {
     margin-bottom: 20px;
 }
 
-#tile-areas {
+#tileAreas {
     display: flex;
     gap: 5vw;
     justify-content: center;
     align-items: center;
 }
-#tile-circles {
+#tileCircles {
     border: 2px solid var(--lightest);
     display: flex;
     justify-content: space-around;
@@ -92,7 +92,7 @@ header {
     background-color: var(--dark-gray);
 }
 
-#game-buttons {
+#gameButtons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -100,6 +100,6 @@ header {
     margin-bottom: 1em;
 }
 
-#game-buttons button:hover {
+#gameButtons button:hover {
     cursor: pointer;
 }

@@ -1,21 +1,22 @@
 <html>
     <head>
         <title>YU</title>
-        <script type="module" src="index.js"></script>
+        <script type="module" src="pieces.js"></script>
+        <script type="module" src="logic.js"></script>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <header>
             Welcome to Yellow Umbrella Gaming
         </header>
-        <div id="tile-areas">
+        <div id="tileAreas">
             <game-board type="triangle"></game-board>
             <game-board type="grid"></game-board>
         </div>
-        <div id="game-buttons">
-            <button>Deal tiles</button>
+        <div id="gameButtons">
+            <button id="dealTilesButton">Deal tiles</button>
         </div>
-        <div id="tile-circles">
+        <div id="tileCircles">
             <div class="circle">
                 <div class="tile dark-pink"></div>
                 <div class="tile dark-blue"></div>
