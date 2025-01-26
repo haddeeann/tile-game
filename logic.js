@@ -8,9 +8,44 @@ function handleMoveTile(event) {
     if (tileClassToRemove) {
         Array.from(parentCircle.children).forEach(child => {
             if (child.classList.contains(tileClassToRemove)) {
+                moveToGameBoard(child, tileClassToRemove);
                 child.remove();
             }
         })
+    }
+}
+
+function moveToGameBoard(tile, tileClass) {
+    const gameBoard = document.querySelector('game-board[type="triangle"]');
+    // const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
+    const tileIndex = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'].indexOf(tileClass);
+    if (gameBoard) {
+        const boardRow = gameBoard.shadowRoot.querySelector(`board-row[row-index="${tileIndex}"]`);
+        const boardSquares = boardRow.shadowRoot.querySelectorAll('board-square');
+// Find the first empty square
+        const targetSquare = Array.from(boardSquares).find(square => {
+            const shadowChildren = Array.from(square.shadowRoot.children);
+            const hasNoTiles = shadowChildren.every(child => !child.classList.contains('tile'));
+            return hasNoTiles && !square.hasAttribute('filled'); // Ensure it's not already marked as filled
+        });
+
+        if (targetSquare) {
+            // Update the target square to visually represent the tile
+            const tileColor = tile.classList[1]; // Assuming the tile color is the second class
+            targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor; // Copy tile's background color
+            targetSquare.style.borderColor = getComputedStyle(tile).borderColor; // Copy tile's border color
+
+            // Optionally, copy other visual styles (e.g., border-radius, box-shadow)
+            // targetSquare.style.borderRadius = getComputedStyle(tile).borderRadius;
+
+            // Mark the square as "filled" to prevent future updates
+            targetSquare.setAttribute('filled', 'true');
+
+            // Log the successful filling of the square
+            console.log(`Filled target square with tile (${tileColor}).`);
+        } else {
+            console.log('No empty square available for the tile.');
+        }
     }
 }
 export function dealTiles() {
