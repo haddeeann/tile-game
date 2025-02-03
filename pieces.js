@@ -29,6 +29,7 @@ class GameBoard extends HTMLElement {
                 const boardRow = document.createElement('board-row');
                 boardRow.setAttribute('squares', String(row));
                 boardRow.setAttribute('row-index', String(row - 1));
+                boardRow.setAttribute('type', type);
                 div.appendChild(boardRow);
             }
         } else if (type === 'grid') {
@@ -39,6 +40,7 @@ class GameBoard extends HTMLElement {
                 const boardRow = document.createElement('board-row');
                 boardRow.setAttribute('squares', 5);
                 boardRow.setAttribute('row-index', String(row - 1));
+                boardRow.setAttribute('type', type);
                 div.appendChild(boardRow);
             }
         }
@@ -51,6 +53,7 @@ class BoardRow extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         const squares = parseInt(this.getAttribute('squares'), 10) || 1;
         const rowIndex = this.getAttribute('row-index');
+        const type = this.getAttribute('type');
 
         const template = document.createElement('template');
         template.innerHTML = `
@@ -68,7 +71,8 @@ class BoardRow extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         for (let i = 0; i < squares; i++) {
             const square = document.createElement('board-square');
-            square.setAttribute('row-index', rowIndex)
+            square.setAttribute('row-index', rowIndex);
+            square.setAttribute('type', type);
             this.shadowRoot.appendChild(square);
         }
     }
@@ -82,12 +86,11 @@ class BoardSquare extends HTMLElement {
         const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
         const squareColor = colors[rowIndex];
         const template = document.createElement('template');
+        const type = this.getAttribute('type');
         template.innerHTML = `
             <style>
-                :host([type="triangle"]) {
-                    background-color: ${squareColor};
-                }
                 :host {
+                    ${type === 'triangle' ? `background-color: ${squareColor};` : ''}
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
