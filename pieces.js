@@ -16,12 +16,6 @@ class GameBoard extends HTMLElement {
                     width: ${BOARD_WIDTH}px;
                     height: auto; /* maintain aspect ratio */
                 }
-                :host([type="grid"]) {
-                    display: grid;
-                    grid-template-columns: repeat(5, ${TILE_SIZE}px);
-                    grid-template-rows: repeat(5, ${TILE_SIZE});
-                    gap: 10px;
-                }
             </style>
             <slot></slot>
         `;
@@ -38,9 +32,14 @@ class GameBoard extends HTMLElement {
                 div.appendChild(boardRow);
             }
         } else if (type === 'grid') {
-            for (let i = 0; i < 25; i++) {
-                const square = document.createElement('board-square');
-                this.shadowRoot.appendChild(square);
+            const div = document.createElement('div');
+
+            this.shadowRoot.appendChild(div);
+            for (let row = 1; row <= 5; row++) {
+                const boardRow = document.createElement('board-row');
+                boardRow.setAttribute('squares', 5);
+                boardRow.setAttribute('row-index', String(row - 1));
+                div.appendChild(boardRow);
             }
         }
     }
@@ -85,12 +84,14 @@ class BoardSquare extends HTMLElement {
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
+                :host([type="triangle"]) {
+                    background-color: ${squareColor};
+                }
                 :host {
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
                     border: 2px solid var(--dark-gray);
-                    background-color: ${squareColor};
                     margin-right: 10px;
                 }
                 :host(:last-child) {
