@@ -54,7 +54,17 @@ class BoardRow extends HTMLElement {
         const squares = parseInt(this.getAttribute('squares'), 10) || 1;
         const rowIndex = this.getAttribute('row-index');
         const type = this.getAttribute('type');
-
+        const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
+        let gridColors = [];
+        let index = rowIndex;
+        for (var i = 0; i < 5; i++) {
+            gridColors.push(colors[index])
+            if (index == 4) {
+                index = 0
+            } else {
+                index++
+            }
+        }
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -70,9 +80,14 @@ class BoardRow extends HTMLElement {
         `;
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         for (let i = 0; i < squares; i++) {
+            let gridColor = '';
+            if (type === 'grid') {
+                gridColor = gridColors.shift();
+            }
             const square = document.createElement('board-square');
             square.setAttribute('row-index', rowIndex);
             square.setAttribute('type', type);
+            square.setAttribute('gridColor', gridColor);
             this.shadowRoot.appendChild(square);
         }
     }
@@ -87,10 +102,12 @@ class BoardSquare extends HTMLElement {
         const squareColor = colors[rowIndex];
         const template = document.createElement('template');
         const type = this.getAttribute('type');
+        const gridColor = this.getAttribute('gridColor');
+
         template.innerHTML = `
             <style>
                 :host {
-                    ${type === 'triangle' ? `background-color: ${squareColor};` : ''}
+                    ${type === 'triangle' ? `background-color: ${squareColor};` : `background-color: ${gridColor};`}
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
