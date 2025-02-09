@@ -14,13 +14,18 @@ function handleMoveTile(event) {
         })
     }
 }
+let currentPlayer = "player1"; // Start with player 1
 
 function moveToGameBoard(tile, tileClass) {
-    const gameBoard = document.querySelector('game-board[type="triangle"]');
+    // Select the correct player's board
+    const playerBoard = document.querySelector(`#${currentPlayer}`);
+    const gameBoard = playerBoard.querySelector('game-board[type="triangle"]'); // Choose the triangle board
+
     const tileIndex = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'].indexOf(tileClass);
     if (gameBoard) {
         const boardRow = gameBoard.shadowRoot.querySelector(`board-row[row-index="${tileIndex}"]`);
         const boardSquares = boardRow.shadowRoot.querySelectorAll('board-square');
+
         // Find the first empty square
         const targetSquare = Array.from(boardSquares).find(square => {
             const shadowChildren = Array.from(square.shadowRoot.children);
@@ -34,16 +39,21 @@ function moveToGameBoard(tile, tileClass) {
             targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor; // Copy tile's background color
             targetSquare.style.borderColor = getComputedStyle(tile).borderColor; // Copy tile's border color
 
-            // Optionally, copy other visual styles (e.g., border-radius, box-shadow)
-            // targetSquare.style.borderRadius = getComputedStyle(tile).borderRadius;
-
             // Mark the square as "filled" to prevent future updates
             targetSquare.setAttribute('filled', 'true');
 
             // Log the successful filling of the square
-            console.log(`Filled target square with tile (${tileColor}).`);
+            console.log(`Player ${currentPlayer} filled target square with tile (${tileColor}).`);
+
+            // **Switch to the next player**
+            currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
+            // Highlight the active player's board
+            document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
+            document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
+
+            console.log(`Now it's ${currentPlayer}'s turn!`);
         } else {
-            console.log('No empty square available for the tile.');
+            console.log(`No empty square available for ${currentPlayer}'s tile.`);
         }
     }
 }

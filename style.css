@@ -32,11 +32,15 @@ header {
     flex-wrap: wrap;
 }
 .tileAreas {
+    border: 1px solid var(--light);
+    background-color: var(--lightest);
     max-width: 50vw;
     display: flex;
     gap: 35px;
     justify-content: center;
     align-items: center;
+    padding-top: 35px;
+    padding-bottom: 35px;
 }
 #tileCircles {
     border: 2px solid var(--lightest);
@@ -88,4 +92,15 @@ header {
 
 #gameButtons button:hover {
     cursor: pointer;
+}
+
+#player1, #player2 {
+    transition: opacity 0.3s ease-in-out;
+}
+.current-turn {
+    outline: 4px solid var(--dark-gray);
+    opacity: 1; /* Ensure the active player is fully visible */
+}
+.inactive {
+    opacity: 0.5; /* Reduce visibility for inactive player */
 }
