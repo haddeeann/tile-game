@@ -17,12 +17,11 @@ function handleMoveTile(event) {
 
 function moveToGameBoard(tile, tileClass) {
     const gameBoard = document.querySelector('game-board[type="triangle"]');
-    // const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
     const tileIndex = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'].indexOf(tileClass);
     if (gameBoard) {
         const boardRow = gameBoard.shadowRoot.querySelector(`board-row[row-index="${tileIndex}"]`);
         const boardSquares = boardRow.shadowRoot.querySelectorAll('board-square');
-// Find the first empty square
+        // Find the first empty square
         const targetSquare = Array.from(boardSquares).find(square => {
             const shadowChildren = Array.from(square.shadowRoot.children);
             const hasNoTiles = shadowChildren.every(child => !child.classList.contains('tile'));
