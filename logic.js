@@ -1,6 +1,8 @@
 const dealTilesButton = document.getElementById('dealTilesButton');
 dealTilesButton.addEventListener('click', dealTiles);
+let currentPlayer = "player1"; // Start with player 1
 function handleMoveTile(event) {
+    console.log('handle move tile first', event.target);
     const clickedEl = event.target;
     const clickedTile = clickedEl.closest('.tile');
     const tileClassToRemove = Array.from(clickedTile.classList).find(className => className !== 'tile');
@@ -13,8 +15,17 @@ function handleMoveTile(event) {
             }
         })
     }
+    // Log the successful filling of the square
+    console.log(`Player ${currentPlayer}.`);
+
+    // **Switch to the next player**
+    currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
+    // Highlight the active player's board
+    document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
+    document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
+
+    console.log(`Now it's ${currentPlayer}'s turn!`);
 }
-let currentPlayer = "player1"; // Start with player 1
 
 function moveToGameBoard(tile, tileClass) {
     // Select the correct player's board
@@ -41,17 +52,6 @@ function moveToGameBoard(tile, tileClass) {
 
             // Mark the square as "filled" to prevent future updates
             targetSquare.setAttribute('filled', 'true');
-
-            // Log the successful filling of the square
-            console.log(`Player ${currentPlayer} filled target square with tile (${tileColor}).`);
-
-            // **Switch to the next player**
-            currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
-            // Highlight the active player's board
-            document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
-            document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
-
-            console.log(`Now it's ${currentPlayer}'s turn!`);
         } else {
             console.log(`No empty square available for ${currentPlayer}'s tile.`);
         }
