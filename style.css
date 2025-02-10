@@ -27,14 +27,14 @@ header {
     text-align: center;
     margin-bottom: 20px;
 }
-.playerBoards {
+#boards {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
 .tileAreas {
     border: 1px solid var(--light);
     background-color: var(--lightest);
-    max-width: 50vw;
     display: flex;
     gap: 35px;
     justify-content: center;
