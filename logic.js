@@ -79,6 +79,7 @@ function moveTilesToScoreboard() {
         if (triangleGameBoard) {
             for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
                 const rowColor = squareColors[rowIndex];
+                const tileColor = squareFilledColors[rowIndex]
                 let rowFilled = true;
                 const boardRow = triangleGameBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
                 const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
@@ -94,10 +95,13 @@ function moveTilesToScoreboard() {
                     Array.from(scoreBoardSquares).every(square => {
                         const squareColor = square.getAttribute('gridcolor');
                         if (squareColor === rowColor) {
-                            const tileColor = squareFilledColors[rowIndex]
                             square.style.backgroundColor = `var(--${tileColor})`; // Apply CSS variable color
                             square.setAttribute('filled', 'true'); // Mark as filled
                         }
+                    })
+                    Array.from(boardSquares).forEach(square => {
+                        square.style.backgroundColor = `${rowColor}`; // Apply CSS variable color
+                        square.setAttribute('filled', 'false'); // Mark as filled
                     })
                 }
             }
