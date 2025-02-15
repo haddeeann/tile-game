@@ -22,36 +22,56 @@ function handleMoveTile(event) {
     document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
 }
 
+function getTargetSquare(squares) {
+    return Array.from(squares).reverse().find(square => {
+        const shadowChildren = Array.from(square.shadowRoot.children);
+        return !square.hasAttribute('filled') && shadowChildren.every(child => !child.classList.contains('tile'));
+    });
+}
+
+
 function moveToGameBoard(tile, tileClass) {
     // Select the correct player's board
     const playerBoard = document.querySelector(`#${currentPlayer}`);
-    const gameBoard = playerBoard.querySelector('game-board[type="triangle"]'); // Choose the triangle board
+    const gameBoard = playerBoard.querySelector('game-board[type="triangle"]'); // Main game board
 
     const tileIndex = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'].indexOf(tileClass);
+
     if (gameBoard) {
         const boardRow = gameBoard.shadowRoot.querySelector(`board-row[row-index="${tileIndex}"]`);
-        const boardSquares = boardRow.shadowRoot.querySelectorAll('board-square');
+        const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
 
-        // Find the first empty square
-        const targetSquare = Array.from(boardSquares).reverse().find(square => {
-            const shadowChildren = Array.from(square.shadowRoot.children);
-            const hasNoTiles = shadowChildren.every(child => !child.classList.contains('tile'));
-            return hasNoTiles && !square.hasAttribute('filled'); // Ensure it's not already marked as filled
-        });
+        // Try to find an empty square in the game board
+        let targetSquare = getTargetSquare(boardSquares);
+
+        // If no empty square is found, try the overflow row
+        if (!targetSquare) {
+            console.log(`Game board is full for ${currentPlayer}. Moving to overflow.`);
+            const overflowBoard = playerBoard.querySelector('overflow-board');
+
+            if (overflowBoard) {
+                const overflowRow = overflowBoard.shadowRoot.querySelector('board-row');
+                const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
+                targetSquare = getTargetSquare(overflowSquares);
+            }
+        }
 
         if (targetSquare) {
             // Update the target square to visually represent the tile
             const tileColor = tile.classList[1]; // Assuming the tile color is the second class
-            targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor; // Copy tile's background color
-            targetSquare.style.borderColor = getComputedStyle(tile).borderColor; // Copy tile's border color
+            targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor;
+            targetSquare.style.borderColor = getComputedStyle(tile).borderColor;
 
             // Mark the square as "filled" to prevent future updates
             targetSquare.setAttribute('filled', 'true');
+
+            console.log(`${currentPlayer} placed a tile in ${targetSquare.tagName}.`);
         } else {
-            console.log(`No empty square available for ${currentPlayer}'s tile.`);
+            console.log(`No available space left for ${currentPlayer}.`);
         }
     }
 }
+
 export function dealTiles() {
     /* Colors of tiles */
     const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
