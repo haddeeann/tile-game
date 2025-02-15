@@ -51,6 +51,8 @@ class BoardRow extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+    }
+    connectedCallback() {
         const squares = parseInt(this.getAttribute('squares'), 10) || 1;
         const rowIndex = this.getAttribute('row-index');
         const type = this.getAttribute('type');
@@ -65,6 +67,7 @@ class BoardRow extends HTMLElement {
                 index++
             }
         }
+        console.log(squares, this.getAttribute('type'), this.getAttribute('row-index'))
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -81,6 +84,7 @@ class BoardRow extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         for (let i = 0; i < squares; i++) {
             let gridColor = '';
+
             if (type === 'grid') {
                 gridColor = gridColors.shift();
             }
@@ -128,6 +132,8 @@ class OverflowBoard extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+    }
+    connectedCallback () {
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -138,17 +144,25 @@ class OverflowBoard extends HTMLElement {
                     border: 1px solid var(--light);
                     display: block;
                 }
+                .overflow-container {
+                    display: flex;
+                    gap: ${TILE_MARGIN}px;
+                }
             </style>
-            <slot>hello</slot>
+            <div class="overflow-container"></div>
         `;
+
         this.shadowRoot.appendChild(template.content.cloneNode(true));
-        // for (let row = 1; row <= 5; row++) {
-        //     const boardRow = document.createElement('board-row');
-        //     boardRow.setAttribute('squares', 5);
-        //     boardRow.setAttribute('row-index', String(row - 1));
-        //     boardRow.setAttribute('type', type);
-        //     div.appendChild(boardRow);
-        // }
+
+        // Select the container where board-row should go
+        const div = this.shadowRoot.querySelector(".overflow-container");
+
+        // Create a BoardRow
+        const boardRow = document.createElement('board-row');
+        boardRow.setAttribute('squares', 5); // 5 squares in a row
+        boardRow.setAttribute('row-index', '0');
+        boardRow.setAttribute('type', 'overflow'); // Ensure it gets the right styling
+        div.appendChild(boardRow);
     }
 }
 
