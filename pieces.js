@@ -111,7 +111,6 @@ class BoardSquare extends HTMLElement {
         const template = document.createElement('template');
         const type = this.getAttribute('type');
         const gridColor = this.getAttribute('gridColor');
-        console.log(type)
 
         template.innerHTML = `
             <style>

@@ -1,7 +1,9 @@
 const dealTilesButton = document.getElementById('dealTilesButton');
+const moveTilesButton = document.getElementById('moveTilesButton');
 dealTilesButton.addEventListener('click', dealTiles);
-let currentPlayer = "player1"; // Start with player 1
-function handleMoveTile(event) {
+moveTilesButton.addEventListener('click', moveTilesToScoreboard);
+let currentPlayer = 'player1'; // Start with player 1
+function handleMoveTileToGameboard(event) {
     const clickedEl = event.target;
     const clickedTile = clickedEl.closest('.tile');
     const tileClassToRemove = Array.from(clickedTile.classList).find(className => className !== 'tile');
@@ -29,7 +31,6 @@ function getTargetSquare(squares) {
     });
 }
 
-
 function moveToGameBoard(tile, tileClass) {
     // Select the correct player's board
     const playerBoard = document.querySelector(`#${currentPlayer}`);
@@ -46,7 +47,6 @@ function moveToGameBoard(tile, tileClass) {
 
         // If no empty square is found, try the overflow row
         if (!targetSquare) {
-            console.log(`Game board is full for ${currentPlayer}. Moving to overflow.`);
             const overflowBoard = playerBoard.querySelector('overflow-board');
 
             if (overflowBoard) {
@@ -64,10 +64,44 @@ function moveToGameBoard(tile, tileClass) {
 
             // Mark the square as "filled" to prevent future updates
             targetSquare.setAttribute('filled', 'true');
+        }
+    }
+}
 
-            console.log(`${currentPlayer} placed a tile in ${targetSquare.tagName}.`);
-        } else {
-            console.log(`No available space left for ${currentPlayer}.`);
+function moveTilesToScoreboard() {
+    const players = ['player1', 'player2'];
+    const squareColors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
+    const squareFilledColors = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'];
+    for (let player of players) {
+        const playerBoard = document.querySelector(`#${player}`);
+        const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
+        const gridScoreBoard = playerBoard.querySelector('game-board[type="grid"]');
+        if (triangleGameBoard) {
+            for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
+                const rowColor = squareColors[rowIndex];
+                let rowFilled = true;
+                const boardRow = triangleGameBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
+                const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
+                Array.from(boardSquares).every(square => {
+                    const squareFilled = square.hasAttribute('filled');
+                    if (!squareFilled) {
+                        rowFilled = false;
+                    }
+                })
+                if (rowFilled) {
+                    const scoreBoardRow = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
+                    const scoreBoardSquares = scoreBoardRow ? scoreBoardRow.shadowRoot.querySelectorAll('board-square') : [];
+                    Array.from(scoreBoardSquares).every(square => {
+                        const squareColor = square.getAttribute('gridcolor');
+                        if (squareColor === rowColor) {
+                            const tileColor = squareFilledColors[rowIndex]
+                            square.style.backgroundColor = `var(--${tileColor})`; // Apply CSS variable color
+                            square.setAttribute('filled', 'true'); // Mark as filled
+                        }
+                    })
+                }
+            }
+
         }
     }
 }
@@ -99,7 +133,7 @@ export function dealTiles() {
         const positions = [];
         for (let j = 0; j < 5; j++) {
             const tile = document.createElement('div');
-            tile.addEventListener('click', handleMoveTile);
+            tile.addEventListener('click', handleMoveTileToGameboard);
             const tileTooltip = document.createElement('span');
             tileTooltip.innerHTML = `${allTiles[i * 5 + j]}`;
             tile.appendChild(tileTooltip);
