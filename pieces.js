@@ -124,6 +124,35 @@ class BoardSquare extends HTMLElement {
     }
 }
 
+class OverflowBoard extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                :host {
+                    width: 100%;
+                    height: 100px;
+                    background-color: var(--lightest);
+                    border: 1px solid var(--light);
+                    display: block;
+                }
+            </style>
+            <slot>hello</slot>
+        `;
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+        // for (let row = 1; row <= 5; row++) {
+        //     const boardRow = document.createElement('board-row');
+        //     boardRow.setAttribute('squares', 5);
+        //     boardRow.setAttribute('row-index', String(row - 1));
+        //     boardRow.setAttribute('type', type);
+        //     div.appendChild(boardRow);
+        // }
+    }
+}
+
 customElements.define('game-board', GameBoard);
 customElements.define('board-row', BoardRow);
 customElements.define('board-square', BoardSquare);
+customElements.define('overflow-board', OverflowBoard);

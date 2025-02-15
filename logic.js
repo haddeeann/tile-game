@@ -2,7 +2,6 @@ const dealTilesButton = document.getElementById('dealTilesButton');
 dealTilesButton.addEventListener('click', dealTiles);
 let currentPlayer = "player1"; // Start with player 1
 function handleMoveTile(event) {
-    console.log('handle move tile first', event.target);
     const clickedEl = event.target;
     const clickedTile = clickedEl.closest('.tile');
     const tileClassToRemove = Array.from(clickedTile.classList).find(className => className !== 'tile');
@@ -15,16 +14,12 @@ function handleMoveTile(event) {
             }
         })
     }
-    // Log the successful filling of the square
-    console.log(`Player ${currentPlayer}.`);
 
     // **Switch to the next player**
     currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
     // Highlight the active player's board
     document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
     document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
-
-    console.log(`Now it's ${currentPlayer}'s turn!`);
 }
 
 function moveToGameBoard(tile, tileClass) {
@@ -38,7 +33,7 @@ function moveToGameBoard(tile, tileClass) {
         const boardSquares = boardRow.shadowRoot.querySelectorAll('board-square');
 
         // Find the first empty square
-        const targetSquare = Array.from(boardSquares).find(square => {
+        const targetSquare = Array.from(boardSquares).reverse().find(square => {
             const shadowChildren = Array.from(square.shadowRoot.children);
             const hasNoTiles = shadowChildren.every(child => !child.classList.contains('tile'));
             return hasNoTiles && !square.hasAttribute('filled'); // Ensure it's not already marked as filled
