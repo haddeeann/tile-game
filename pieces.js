@@ -67,7 +67,6 @@ class BoardRow extends HTMLElement {
                 index++
             }
         }
-        console.log(squares, this.getAttribute('type'), this.getAttribute('row-index'))
         const template = document.createElement('template');
         template.innerHTML = `
             <style>
@@ -87,6 +86,8 @@ class BoardRow extends HTMLElement {
 
             if (type === 'grid') {
                 gridColor = gridColors.shift();
+            } else if (type === 'overflow') {
+                gridColor = 'var(--light)'
             }
             const square = document.createElement('board-square');
             square.setAttribute('row-index', rowIndex);
@@ -101,12 +102,16 @@ class BoardSquare extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'});
+    }
+
+    connectedCallback() {
         const rowIndex = parseInt(this.getAttribute('row-index'), 10);
         const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
         const squareColor = colors[rowIndex];
         const template = document.createElement('template');
         const type = this.getAttribute('type');
         const gridColor = this.getAttribute('gridColor');
+        console.log(type)
 
         template.innerHTML = `
             <style>
@@ -139,10 +144,12 @@ class OverflowBoard extends HTMLElement {
             <style>
                 :host {
                     width: 100%;
-                    height: 100px;
+                    height: 50px;
                     background-color: var(--lightest);
                     border: 1px solid var(--light);
                     display: block;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
                 }
                 .overflow-container {
                     display: flex;
@@ -159,7 +166,7 @@ class OverflowBoard extends HTMLElement {
 
         // Create a BoardRow
         const boardRow = document.createElement('board-row');
-        boardRow.setAttribute('squares', 5); // 5 squares in a row
+        boardRow.setAttribute('squares', 6); // 5 squares in a row
         boardRow.setAttribute('row-index', '0');
         boardRow.setAttribute('type', 'overflow'); // Ensure it gets the right styling
         div.appendChild(boardRow);
