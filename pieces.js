@@ -75,6 +75,9 @@ class BoardRow extends HTMLElement {
                     justify-content: flex-end;
                     margin-bottom: 10px;
                 }
+                .selected {
+                    border: 2px solid red;
+                }
                 :host(:last-child) {
                     margin-bottom: 0;
                 }
@@ -95,6 +98,17 @@ class BoardRow extends HTMLElement {
             square.setAttribute('gridColor', gridColor);
             this.shadowRoot.appendChild(square);
         }
+        this.addEventListener('click', this.handleRowSelection)
+    }
+
+    handleRowSelection(event) {
+        event.stopPropagation();
+
+        const previouslySelected = document.querySelector('board-row.selected');
+        if (previouslySelected && previouslySelected !== this) {
+            previouslySelected.classList.remove('selected'); // Remove selection
+        }
+        this.classList.toggle('selected');
     }
 }
 
@@ -121,6 +135,7 @@ class BoardSquare extends HTMLElement {
                     height: ${TILE_SIZE};
                     border: 2px solid var(--dark-gray);
                     margin-right: 10px;
+                    cursor: pointer;
                 }
                 :host(:last-child) {
                     margin-right: 0;

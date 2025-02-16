@@ -104,3 +104,7 @@ header {
 .inactive {
     opacity: 0.5; /* Reduce visibility for inactive player */
 }
+
+.selected {
+    border: 2px solid red;
+}

@@ -3,9 +3,55 @@ const moveTilesButton = document.getElementById('moveTilesButton');
 dealTilesButton.addEventListener('click', dealTiles);
 moveTilesButton.addEventListener('click', moveTilesToScoreboard);
 let currentPlayer = 'player1'; // Start with player 1
-function handleMoveTileToGameboard(event) {
-    const clickedEl = event.target;
-    const clickedTile = clickedEl.closest('.tile');
+
+let selectedTile = null; // Track the selected tile
+let selectedRow = null; // track the selected row
+
+function handleTileSelection(event) {
+    const clickedTile = event.target.closest('.tile');
+
+    // If clicking the same tile again, deselect it
+    if (selectedTile && selectedTile === clickedTile) {
+        selectedTile.classList.remove('selected'); // Remove selection
+        selectedTile = null;
+        return;
+    }
+
+    // Remove previous selection
+    if (selectedTile) {
+        selectedTile.classList.remove('selected');
+    }
+
+    // Set the new selected tile
+    selectedTile = clickedTile;
+    selectedTile.classList.add('selected');
+}
+
+let selectedTile = null; // Track the selected tile
+let selectedRow = null; // Track the selected row
+
+function handleTileSelection(event) {
+    const clickedTile = event.target.closest('.tile');
+
+    // If clicking the same tile again, deselect it
+    if (selectedTile && selectedTile === clickedTile) {
+        selectedTile.classList.remove('selected'); // Remove selection
+        selectedTile = null;
+        return;
+    }
+
+    // Remove previous selection
+    if (selectedTile) {
+        selectedTile.classList.remove('selected');
+    }
+
+    // Set the new selected tile
+    selectedTile = clickedTile;
+    selectedTile.classList.add('selected');
+}
+
+function handleMoveTileToGameboard() {
+    const clickedTile = selectedTile.closest('.tile');
     const tileClassToRemove = Array.from(clickedTile.classList).find(className => className !== 'tile');
     const parentCircle = clickedTile.closest('.circle');
     if (tileClassToRemove) {
@@ -32,39 +78,31 @@ function getTargetSquare(squares) {
 }
 
 function moveToGameBoard(tile, tileClass) {
-    // Select the correct player's board
     const playerBoard = document.querySelector(`#${currentPlayer}`);
-    const gameBoard = playerBoard.querySelector('game-board[type="triangle"]'); // Main game board
+    const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
 
-    const tileIndex = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'].indexOf(tileClass);
+    // Try to find an empty square in the game board
+    let targetSquare = getTargetSquare(boardSquares);
 
-    if (gameBoard) {
-        const boardRow = gameBoard.shadowRoot.querySelector(`board-row[row-index="${tileIndex}"]`);
-        const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
+    // If no empty square is found, try the overflow row
+    if (!targetSquare) {
+        const overflowBoard = playerBoard.querySelector('overflow-board');
 
-        // Try to find an empty square in the game board
-        let targetSquare = getTargetSquare(boardSquares);
-
-        // If no empty square is found, try the overflow row
-        if (!targetSquare) {
-            const overflowBoard = playerBoard.querySelector('overflow-board');
-
-            if (overflowBoard) {
-                const overflowRow = overflowBoard.shadowRoot.querySelector('board-row');
-                const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
-                targetSquare = getTargetSquare(overflowSquares);
-            }
+        if (overflowBoard) {
+            const overflowRow = overflowBoard.shadowRoot.querySelector('board-row');
+            const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
+            targetSquare = getTargetSquare(overflowSquares);
         }
+    }
 
-        if (targetSquare) {
-            // Update the target square to visually represent the tile
-            const tileColor = tile.classList[1]; // Assuming the tile color is the second class
-            targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor;
-            targetSquare.style.borderColor = getComputedStyle(tile).borderColor;
+    if (targetSquare) {
+        // Update the target square to visually represent the tile
+        const tileColor = tile.classList[1]; // Assuming the tile color is the second class
+        targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor;
+        targetSquare.style.borderColor = getComputedStyle(tile).borderColor;
 
-            // Mark the square as "filled" to prevent future updates
-            targetSquare.setAttribute('filled', 'true');
-        }
+        // Mark the square as "filled" to prevent future updates
+        targetSquare.setAttribute('filled', 'true');
     }
 }
 
@@ -137,12 +175,11 @@ export function dealTiles() {
         const positions = [];
         for (let j = 0; j < 5; j++) {
             const tile = document.createElement('div');
-            tile.addEventListener('click', handleMoveTileToGameboard);
+            tile.addEventListener('click', handleTileSelection);
             const tileTooltip = document.createElement('span');
             tileTooltip.innerHTML = `${allTiles[i * 5 + j]}`;
             tile.appendChild(tileTooltip);
 
-            const tileSize = 30;
             const maxPosition = 90;
             const edgeCircle = 25;
             const minDistance = 40;
