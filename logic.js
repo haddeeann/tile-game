@@ -1,11 +1,12 @@
 const dealTilesButton = document.getElementById('dealTilesButton');
 const moveTilesButton = document.getElementById('moveTilesButton');
+const moveTilesToGameboardButton = document.getElementById('moveTilesToGameboard');
 dealTilesButton.addEventListener('click', dealTiles);
 moveTilesButton.addEventListener('click', moveTilesToScoreboard);
+moveTilesToGameboardButton.addEventListener('click', handleMoveTilesToGameboard)
 let currentPlayer = 'player1'; // Start with player 1
 
 let selectedTile = null; // Track the selected tile
-let selectedRow = null; // track the selected row
 
 function handleTileSelection(event) {
     const clickedTile = event.target.closest('.tile');
@@ -27,47 +28,27 @@ function handleTileSelection(event) {
     selectedTile.classList.add('selected');
 }
 
-let selectedTile = null; // Track the selected tile
-let selectedRow = null; // Track the selected row
+function handleMoveTilesToGameboard() {
+    const playerBoard = document.querySelector(`#${currentPlayer}`);
+    const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
+    const selectedRow = triangleGameBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
 
-function handleTileSelection(event) {
-    const clickedTile = event.target.closest('.tile');
-
-    // If clicking the same tile again, deselect it
-    if (selectedTile && selectedTile === clickedTile) {
-        selectedTile.classList.remove('selected'); // Remove selection
-        selectedTile = null;
-        return;
-    }
-
-    // Remove previous selection
-    if (selectedTile) {
-        selectedTile.classList.remove('selected');
-    }
-
-    // Set the new selected tile
-    selectedTile = clickedTile;
-    selectedTile.classList.add('selected');
-}
-
-function handleMoveTileToGameboard() {
-    const clickedTile = selectedTile.closest('.tile');
-    const tileClassToRemove = Array.from(clickedTile.classList).find(className => className !== 'tile');
-    const parentCircle = clickedTile.closest('.circle');
+    const tileClassToRemove = Array.from(selectedTile.classList).find(className => className !== 'tile');
+    const parentCircle = selectedTile.closest('.circle');
     if (tileClassToRemove) {
         Array.from(parentCircle.children).forEach(child => {
             if (child.classList.contains(tileClassToRemove)) {
-                moveToGameBoard(child, tileClassToRemove);
+                moveToGameBoard(child, tileClassToRemove, selectedRow);
                 child.remove();
             }
         })
     }
-
-    // **Switch to the next player**
-    currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
-    // Highlight the active player's board
-    document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
-    document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
+    //
+    // // **Switch to the next player**
+    // currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
+    // // Highlight the active player's board
+    // document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
+    // document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
 }
 
 function getTargetSquare(squares) {
@@ -77,7 +58,7 @@ function getTargetSquare(squares) {
     });
 }
 
-function moveToGameBoard(tile, tileClass) {
+function moveToGameBoard(tile, tileClass, selectedRow) {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
 

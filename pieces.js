@@ -3,6 +3,7 @@ const TILE_MARGIN = 10;
 const NUM_TILES = 5;
 // Calculate the total width of the game board
 const BOARD_WIDTH = TILE_SIZE * NUM_TILES + TILE_MARGIN * (NUM_TILES - 1);
+let selectedRow = null;
 
 class GameBoard extends HTMLElement {
     constructor() {
@@ -75,7 +76,7 @@ class BoardRow extends HTMLElement {
                     justify-content: flex-end;
                     margin-bottom: 10px;
                 }
-                .selected {
+                :host(.selected) {
                     border: 2px solid red;
                 }
                 :host(:last-child) {
@@ -103,12 +104,13 @@ class BoardRow extends HTMLElement {
 
     handleRowSelection(event) {
         event.stopPropagation();
-
-        const previouslySelected = document.querySelector('board-row.selected');
-        if (previouslySelected && previouslySelected !== this) {
-            previouslySelected.classList.remove('selected'); // Remove selection
+        // Deselect the previously selected row
+        if (selectedRow && selectedRow !== this) {
+            selectedRow.classList.remove('selected');
         }
-        this.classList.toggle('selected');
+        this.classList.add('selected');
+        // Update the global selectedRow reference
+        selectedRow = this.classList.contains('selected') ? this : null;
     }
 }
 
