@@ -106,5 +106,5 @@ header {
 }
 
 .selected {
-    border: 2px solid red;
+    border: 2px solid var(--light);
 }

@@ -157,9 +157,6 @@ export function dealTiles() {
         for (let j = 0; j < 5; j++) {
             const tile = document.createElement('div');
             tile.addEventListener('click', handleTileSelection);
-            const tileTooltip = document.createElement('span');
-            tileTooltip.innerHTML = `${allTiles[i * 5 + j]}`;
-            tile.appendChild(tileTooltip);
 
             const maxPosition = 90;
             const edgeCircle = 25;

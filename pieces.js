@@ -77,7 +77,7 @@ class BoardRow extends HTMLElement {
                     margin-bottom: 10px;
                 }
                 :host(.selected) {
-                    border: 2px solid red;
+                    background-color: var(--light);
                 }
                 :host(:last-child) {
                     margin-bottom: 0;
@@ -99,7 +99,7 @@ class BoardRow extends HTMLElement {
             square.setAttribute('gridColor', gridColor);
             this.shadowRoot.appendChild(square);
         }
-        this.addEventListener('click', this.handleRowSelection)
+        this.addEventListener('click', this.handleRowSelection.bind(this));
     }
 
     handleRowSelection(event) {
@@ -135,7 +135,6 @@ class BoardSquare extends HTMLElement {
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
-                    border: 2px solid var(--dark-gray);
                     margin-right: 10px;
                     cursor: pointer;
                 }
@@ -162,7 +161,6 @@ class OverflowBoard extends HTMLElement {
                     width: 100%;
                     height: 50px;
                     background-color: var(--lightest);
-                    border: 1px solid var(--light);
                     display: block;
                     padding-top: 10px;
                     padding-bottom: 10px;
