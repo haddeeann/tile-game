@@ -76,9 +76,6 @@ class BoardRow extends HTMLElement {
                     justify-content: flex-end;
                     margin-bottom: 10px;
                 }
-                :host(.selected) {
-                    background-color: var(--light);
-                }
                 :host(:last-child) {
                     margin-bottom: 0;
                 }
@@ -106,11 +103,25 @@ class BoardRow extends HTMLElement {
         event.stopPropagation();
         // Deselect the previously selected row
         if (selectedRow && selectedRow !== this) {
+            this.removeSquareStyles(this.classList.contains('selected'), selectedRow);
             selectedRow.classList.remove('selected');
         }
         this.classList.add('selected');
         // Update the global selectedRow reference
         selectedRow = this.classList.contains('selected') ? this : null;
+        this.addSquareStyles(this.classList.contains('selected'), this);
+    }
+    removeSquareStyles(isSelected, row) {
+        const squares = row.shadowRoot.querySelectorAll('board-square');
+        squares.forEach(square => {
+            square.classList.remove('selected');
+        });
+    }
+    addSquareStyles(isSelected, row) {
+        const squares = row.shadowRoot.querySelectorAll('board-square');
+        squares.forEach(square => {
+            square.classList.add('selected');
+        });
     }
 }
 
@@ -137,6 +148,9 @@ class BoardSquare extends HTMLElement {
                     height: ${TILE_SIZE};
                     margin-right: 10px;
                     cursor: pointer;
+                }
+                :host(.selected) {
+                    border: 2px solid var(--light);
                 }
                 :host(:last-child) {
                     margin-right: 0;
