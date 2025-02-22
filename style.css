@@ -65,6 +65,7 @@ header {
     height: 50px;
     position: absolute;
     cursor: pointer;
+    opacity: .95;
 }
 .dark-pink {
     background-color: var(--dark-pink);
@@ -106,5 +107,6 @@ header {
 }
 
 .selected {
-    border: 2px solid var(--light);
+    border: 3px solid white;
+    opacity: 1;
 }
