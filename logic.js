@@ -7,25 +7,36 @@ moveTilesToGameboardButton.addEventListener('click', handleMoveTilesToGameboard)
 let currentPlayer = 'player1'; // Start with player 1
 
 let selectedTile = null; // Track the selected tile
+let selectedTiles = [];
+/* Colors of tiles */
+const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
 
 function handleTileSelection(event) {
     const clickedTile = event.target.closest('.tile');
 
-    // If clicking the same tile again, deselect it
-    if (selectedTile && selectedTile === clickedTile) {
-        selectedTile.classList.remove('selected'); // Remove selection
-        selectedTile = null;
-        return;
-    }
-
     // Remove previous selection
     if (selectedTile) {
-        selectedTile.classList.remove('selected');
+        selectedTile = null;
+        for (const tile of selectedTiles) {
+            tile.classList.remove('selected');
+        }
+        selectedTiles = [];
     }
+
+    // add selected to all the tiles with same colors
+    const tileColor = clickedTile.classList[1]; // todo, don't assume the color is the second class
+    const parentCircle = clickedTile.closest('.circle');
+    const allChildrenTiles = parentCircle.children;
+    for (const tile of allChildrenTiles) {
+        if (tile.classList.contains(tileColor)) {
+            selectedTiles.push(tile);
+            tile.classList.add('selected');
+        }
+    }
+
 
     // Set the new selected tile
     selectedTile = clickedTile;
-    selectedTile.classList.add('selected');
 }
 
 function handleMoveTilesToGameboard() {
@@ -77,7 +88,7 @@ function moveToGameBoard(tile, tileClass, selectedRow) {
 
     if (targetSquare) {
         // Update the target square to visually represent the tile
-        const tileColor = tile.classList[1]; // Assuming the tile color is the second class
+        const tileColor = tile.classList[1]; // Todo: test, don't assume, Assuming the tile color is the second class
         targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor;
         targetSquare.style.borderColor = getComputedStyle(tile).borderColor;
 
@@ -129,9 +140,6 @@ function moveTilesToScoreboard() {
 }
 
 export function dealTiles() {
-    /* Colors of tiles */
-    const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
-
     // Generate an array with 5 tiles of each color
     let allTiles = [];
     for (let tileColor of tileColors) {
