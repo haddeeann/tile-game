@@ -100,6 +100,12 @@ class BoardRow extends HTMLElement {
 
     handleRowSelection(event) {
         event.stopPropagation();
+        const gameBoard = this.getRootNode().host.closest('game-board');
+        const playerContainer = gameBoard.closest('#player1, #player2');
+        if (!playerContainer.classList.contains('current-turn')) {
+            // current player not selected
+            return;
+        }
         // Deselect the previously selected row
         if (selectedRow && selectedRow !== this) {
             this.removeSquareStyles(this.classList.contains('selected'), selectedRow);
