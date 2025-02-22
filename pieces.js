@@ -91,7 +91,6 @@ class BoardRow extends HTMLElement {
                 gridColor = 'var(--light)'
             }
             const square = document.createElement('board-square');
-            square.setAttribute('row-index', rowIndex);
             square.setAttribute('type', type);
             square.setAttribute('gridColor', gridColor);
             this.shadowRoot.appendChild(square);
@@ -132,9 +131,6 @@ class BoardSquare extends HTMLElement {
     }
 
     connectedCallback() {
-        const rowIndex = parseInt(this.getAttribute('row-index'), 10);
-        const colors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
-        const squareColor = colors[rowIndex];
         const template = document.createElement('template');
         const type = this.getAttribute('type');
         const gridColor = this.getAttribute('gridColor');
@@ -142,7 +138,7 @@ class BoardSquare extends HTMLElement {
         template.innerHTML = `
             <style>
                 :host {
-                    ${type === 'triangle' ? `background-color: ${squareColor};` : `background-color: ${gridColor};`}
+                    ${type === 'triangle' ? `background-color: var(--light);` : `background-color: ${gridColor};`}
                     display: block;
                     width: ${TILE_SIZE};
                     height: ${TILE_SIZE};
@@ -194,7 +190,7 @@ class OverflowBoard extends HTMLElement {
 
         // Create a BoardRow
         const boardRow = document.createElement('board-row');
-        boardRow.setAttribute('squares', 6); // 5 squares in a row
+        boardRow.setAttribute('squares', 5); // 5 squares in a row
         boardRow.setAttribute('row-index', '0');
         boardRow.setAttribute('type', 'overflow'); // Ensure it gets the right styling
         div.appendChild(boardRow);

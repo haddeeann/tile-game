@@ -43,12 +43,11 @@ function handleMoveTilesToGameboard() {
             }
         })
     }
-    //
-    // // **Switch to the next player**
-    // currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
-    // // Highlight the active player's board
-    // document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
-    // document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
+    // **Switch to the next player**
+    currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
+    // Highlight the active player's board
+    document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
+    document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
 }
 
 function getTargetSquare(squares) {
