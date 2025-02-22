@@ -70,6 +70,11 @@ function handleMoveTilesToGameboard() {
     // Highlight the active player's board
     document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
     document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
+
+    for (const square of boardSquares) {
+        square.classList.remove('selected');
+    }
+    selectedRow.classList.remove('selected');
 }
 
 function getTargetSquare(squares) {
@@ -211,11 +216,6 @@ export function dealTiles() {
 
         tileCircles.appendChild(circle);
     }
-}
-
-
-export function shuffleTiles () {
-    console.log('shuffle tiles')
 }
 
 document.addEventListener('DOMContentLoaded', () => {
