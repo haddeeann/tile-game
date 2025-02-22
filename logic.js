@@ -43,13 +43,24 @@ function handleMoveTilesToGameboard() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
     const selectedRow = triangleGameBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
-
+    const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
     const tileClassToRemove = Array.from(selectedTile.classList).find(className => className !== 'tile');
+    let lockedColor = null;
+    for (const square of boardSquares) {
+        if (square.hasAttribute('filled')) {
+            lockedColor = square.getAttribute('filled-color');
+            if (lockedColor !== tileClassToRemove) {
+                // let user know that they can't put colors that don't match in same row
+                return;
+            }
+        }
+    }
+
     const parentCircle = selectedTile.closest('.circle');
     if (tileClassToRemove) {
         Array.from(parentCircle.children).forEach(child => {
             if (child.classList.contains(tileClassToRemove)) {
-                moveToGameBoard(child, tileClassToRemove, selectedRow);
+                moveToGameBoard(child, tileClassToRemove, selectedRow, boardSquares);
                 child.remove();
             }
         })
@@ -68,9 +79,8 @@ function getTargetSquare(squares) {
     });
 }
 
-function moveToGameBoard(tile, tileClass, selectedRow) {
+function moveToGameBoard(tile, tileClass, selectedRow, boardSquares) {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
-    const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
 
     // Try to find an empty square in the game board
     let targetSquare = getTargetSquare(boardSquares);
@@ -94,6 +104,7 @@ function moveToGameBoard(tile, tileClass, selectedRow) {
 
         // Mark the square as "filled" to prevent future updates
         targetSquare.setAttribute('filled', 'true');
+        targetSquare.setAttribute('filled-color', tileColor);
     }
 }
 
