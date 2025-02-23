@@ -110,3 +110,21 @@ header {
     border: 3px solid white;
     opacity: 1;
 }
+
+button {
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#moveTilesToGameboard {
+    background-color: lightblue;
+}
+
+#moveTilesToScoreboard {
+    background-color: lightgreen;
+}
+
+#dealTilesButton {
+    background-color: pink;
+}
