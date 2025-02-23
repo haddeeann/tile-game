@@ -169,43 +169,68 @@ function moveToGameBoard(tile, tileClass, boardSquares) {
 
 function moveTilesToScoreboard() {
     const players = ['player1', 'player2'];
-    const squareColors = ['var(--pink)', 'var(--blue)', 'var(--yellow)', 'var(--tan)', 'var(--med)'];
-    const squareFilledColors = ['dark-pink', 'dark-blue', 'dark-yellow', 'dark-tan', 'dark-gray'];
+
+    // Mapping dark tiles to their light background counterparts
+    const darkLightColorConversion = {
+        'dark-pink': 'var(--pink)',
+        'dark-blue': 'var(--blue)',
+        'dark-yellow': 'var(--yellow)',
+        'dark-tan': 'var(--tan)',
+        'dark-gray': 'var(--med)'
+    };
+
     for (let player of players) {
         const playerBoard = document.querySelector(`#${player}`);
         const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
         const gridScoreBoard = playerBoard.querySelector('game-board[type="grid"]');
+
         if (triangleGameBoard) {
             for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
-                const rowColor = squareColors[rowIndex];
-                const tileColor = squareFilledColors[rowIndex]
+                let gameboardSquareColor = null;
                 let rowFilled = true;
-                const boardRow = triangleGameBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
-                const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
-                Array.from(boardSquares).every(square => {
-                    const squareFilled = square.hasAttribute('filled');
+
+                // Get the gameboard row
+                const gameboardRow = triangleGameBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
+                const gameboardSquares = gameboardRow ? gameboardRow.shadowRoot.querySelectorAll('board-square') : [];
+
+                // Check if the row is fully filled and get the color of the tiles
+                Array.from(gameboardSquares).forEach(gameboardSquare => {
+                    const squareFilled = gameboardSquare.hasAttribute('filled');
+                    if (squareFilled && !gameboardSquareColor) {
+                        gameboardSquareColor = gameboardSquare.getAttribute('filled-color');
+                    }
                     if (!squareFilled) {
                         rowFilled = false;
                     }
-                })
+                });
+
+                // If the row is filled, move tiles to scoreboard
                 if (rowFilled) {
                     const scoreBoardRow = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
                     const scoreBoardSquares = scoreBoardRow ? scoreBoardRow.shadowRoot.querySelectorAll('board-square') : [];
-                    Array.from(scoreBoardSquares).every(square => {
-                        const squareColor = square.getAttribute('gridcolor');
-                        if (squareColor === rowColor) {
-                            square.style.backgroundColor = `var(--${tileColor})`; // Apply CSS variable color
-                            square.setAttribute('filled', 'true'); // Mark as filled
+
+                    // Find the correct light-colored square on the scoreboard
+                    Array.from(scoreBoardSquares).forEach(scoreBoardSquare => {
+                        const scoreboardSquareColor = scoreBoardSquare.getAttribute('gridcolor');
+                        if (scoreboardSquareColor === darkLightColorConversion[gameboardSquareColor]) {
+                            scoreBoardSquare.style.backgroundColor = `var(--${gameboardSquareColor})`; // Apply dark tile color
+                            scoreBoardSquare.setAttribute('filled', 'true'); // Mark as filled
                         }
-                    })
-                    Array.from(boardSquares).forEach(square => {
-                        square.style.backgroundColor = `${rowColor}`; // Apply CSS variable color
-                        square.setAttribute('filled', 'false'); // Mark as filled
-                    })
+                    });
+
+                    // **Clear the gameboard row after moving tiles**
+                    Array.from(gameboardSquares).forEach(gameboardSquare => {
+                        gameboardSquare.style.backgroundColor = 'var(--light)'; // Reset background color
+                        gameboardSquare.removeAttribute('filled'); // Remove 'filled' attribute
+                        gameboardSquare.removeAttribute('filled-color'); // Remove color reference
+                    });
                 }
             }
         }
     }
+
+    // Hide "Move Tiles to Scoreboard" button after moving
+    moveTilesToScoreboardButton.style.display = 'none';
 }
 
 export function dealTiles() {
