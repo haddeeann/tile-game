@@ -12,6 +12,19 @@ let selectedRow = null;
 /* Colors of tiles */
 const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
 
+function updateMoveTilesToScoreboardButton() {
+    const tileCircles = document.getElementById('tileCircles');
+
+    // Check if all tiles are moved (i.e., no `.tile` elements inside `#tileCircles`)
+    const remainingTiles = tileCircles.querySelectorAll('.tile').length === 0;
+
+    if (remainingTiles) {
+        moveTilesToScoreboardButton.style.display = 'block'; // Show button
+    } else {
+        moveTilesToScoreboardButton.style.display = 'none'; // Hide button
+    }
+}
+
 function updateMoveTilesToGameboardButton() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
@@ -108,9 +121,13 @@ function handleMoveTilesToGameboard() {
     for (const square of boardSquares) {
         square.classList.remove('selected');
     }
-    selectedRow.classList.remove('selected');
+    if (selectedRow) {
+        selectedRow.classList.remove('selected');
+    }
     selectedRow = null;
     moveTilesToGameboardButton.style.display = 'none'; // rehide the button once the rows are moved
+    // if the round is over, show move tiles to scoreboard
+    updateMoveTilesToScoreboardButton();
 }
 
 function getTargetSquare(squares) {
