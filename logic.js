@@ -12,7 +12,7 @@ let selectedRow = null;
 /* Colors of tiles */
 const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
 
-function updateMoveTilesToScoreboardButton() {
+function tileScoreboardButton() {
     const tileCircles = document.getElementById('tileCircles');
 
     // Check if all tiles are moved (i.e., no `.tile` elements inside `#tileCircles`)
@@ -25,7 +25,7 @@ function updateMoveTilesToScoreboardButton() {
     }
 }
 
-function updateMoveTilesToGameboardButton() {
+function tileGameboardButton() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
     let freeRow = false;
@@ -36,7 +36,6 @@ function updateMoveTilesToGameboardButton() {
             Array.from(boardSquares).every(square => {
                 if (square.hasAttribute('filled')) {
                     const squareColor = square.getAttribute('filled-color');
-                    console.log(squareColor);
                     const tileColor = selectedTile.style.backgroundColor;
                     if (tileColor === squareColor) {
                         let targetSquare = getTargetSquare(boardSquares);
@@ -44,13 +43,16 @@ function updateMoveTilesToGameboardButton() {
                             freeRow = true;
                         }
                     }
+                } else {
+                    freeRow = true;
                 }
             })
         }
     }
-
-    if (selectedTile && selectedRow || selectedTile && !freeRow) {
-        moveTilesToGameboardButton.style.display = 'block'; // Show button
+    if (selectedTile && selectedRow) {
+        moveTilesToGameboardButton.style.display = 'block';
+    } else if (selectedTile && !freeRow) {
+        moveTilesToGameboardButton.style.display = 'block';
     } else {
         moveTilesToGameboardButton.style.display = 'none'; // Hide button
     }
@@ -58,7 +60,6 @@ function updateMoveTilesToGameboardButton() {
 
 function handleTileSelection(event) {
     const clickedTile = event.target.closest('.tile');
-
     // Remove previous selection
     if (selectedTile) {
         selectedTile = null;
@@ -81,7 +82,7 @@ function handleTileSelection(event) {
 
     // Set the new selected tile
     selectedTile = clickedTile;
-    updateMoveTilesToGameboardButton();
+    tileGameboardButton();
 }
 
 // step 1 of 2 for move tiles to gameboard
@@ -125,9 +126,10 @@ function handleMoveTilesToGameboard() {
         selectedRow.classList.remove('selected');
     }
     selectedRow = null;
+    selectedTile = null;
     moveTilesToGameboardButton.style.display = 'none'; // rehide the button once the rows are moved
     // if the round is over, show move tiles to scoreboard
-    updateMoveTilesToScoreboardButton();
+    tileScoreboardButton();
 }
 
 function getTargetSquare(squares) {
@@ -416,7 +418,7 @@ class BoardRow extends HTMLElement {
         // Update the global selectedRow reference
         selectedRow = this.classList.contains('selected') ? this : null;
         this.addSquareStyles(this.classList.contains('selected'), this);
-        updateMoveTilesToGameboardButton();
+        tileGameboardButton();
     }
     removeSquareStyles(isSelected, row) {
         const squares = row.shadowRoot.querySelectorAll('board-square');
