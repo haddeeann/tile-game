@@ -90,6 +90,10 @@ function handleMoveTilesToGameboard() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
     selectedRow = triangleGameBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
+    if (!selectedRow) {
+        const overflowBoard = playerBoard.querySelector('overflow-board');
+        selectedRow = overflowBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
+    }
     const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
     const tileClassToRemove = Array.from(selectedTile.classList).find(className => className !== 'tile');
     let lockedColor = null;
@@ -117,7 +121,6 @@ function handleMoveTilesToGameboard() {
     // Highlight the active player's board
     document.getElementById("player1").classList.toggle("current-turn", currentPlayer === "player1");
     document.getElementById("player2").classList.toggle("current-turn", currentPlayer === "player2");
-
     // reset selected and button
     for (const square of boardSquares) {
         square.classList.remove('selected');
