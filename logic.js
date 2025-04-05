@@ -71,8 +71,11 @@ function handleTileSelection(event) {
 
     // add selected to all the tiles with same colors
     const tileColor = clickedTile.classList[1]; // todo, don't assume the color is the second class
-    const parentCircle = clickedTile.closest('.circle');
-    const allChildrenTiles = parentCircle.children;
+    let tileArea = clickedTile.closest('.circle');
+    if (!tileArea) {
+        tileArea = clickedTile.closest('#floor')
+    }
+    const allChildrenTiles = tileArea.children;
     for (const tile of allChildrenTiles) {
         if (tile.classList.contains(tileColor)) {
             selectedTiles.push(tile);
@@ -85,7 +88,7 @@ function handleTileSelection(event) {
     tileGameboardButton();
 }
 
-// step 1 of 2 for move tiles to gameboard
+// step 1 of 3 for move tiles to gameboard
 function handleMoveTilesToGameboard() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
@@ -106,15 +109,26 @@ function handleMoveTilesToGameboard() {
             }
         }
     }
-
-    const parentCircle = selectedTile.closest('.circle');
+    let tileArea = selectedTile.closest('.circle');
+    let floor = false;
+    if (!tileArea) {
+        tileArea = selectedTile.closest('#floor');
+        floor = true;
+    }
     if (tileClassToRemove) {
-        Array.from(parentCircle.children).forEach(child => {
+        Array.from(tileArea.children).forEach(child => {
             if (child.classList.contains(tileClassToRemove)) {
                 moveToGameBoard(child, tileClassToRemove, boardSquares);
                 child.remove();
             }
         })
+        if (!floor) {
+            Array.from(tileArea.children).forEach(child => {
+                if (!child.classList.contains(tileClassToRemove)) {
+                    moveToFloor(child);
+                }
+            })
+        }
     }
     // **Switch to the next player**
     currentPlayer = currentPlayer === "player1" ? "player2" : "player1"; // Toggle player
@@ -142,7 +156,7 @@ function getTargetSquare(squares) {
     });
 }
 
-// step 2 of 2 for move tiles to gameboard
+// step 2 of 3 for move tiles to gameboard
 function moveToGameBoard(tile, tileClass, boardSquares) {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
 
@@ -170,6 +184,13 @@ function moveToGameBoard(tile, tileClass, boardSquares) {
         targetSquare.setAttribute('filled', 'true');
         targetSquare.setAttribute('filled-color', tileColor);
     }
+}
+
+// step 3 of 3 for move tiles to gameboard, move extra to floor
+function moveToFloor(tile) {
+    const floor = document.querySelector('#floor');
+    floor.appendChild(tile);
+    tile.addEventListener('click', handleTileSelection);
 }
 
 function moveTilesToScoreboard() {

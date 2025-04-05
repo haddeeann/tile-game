@@ -128,3 +128,9 @@ button {
 #dealTilesButton {
     background-color: pink;
 }
+#floor {
+    position: relative;
+    border: 1px solid var(--light);
+    background-color: var(--lightest);
+    height: 200px;
+}
