@@ -14,11 +14,13 @@ const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yel
 
 function tileScoreboardButton() {
     const tileCircles = document.getElementById('tileCircles');
+    const floor = document.getElementById('floor');
 
     // Check if all tiles are moved (i.e., no `.tile` elements inside `#tileCircles`)
-    const remainingTiles = tileCircles.querySelectorAll('.tile').length === 0;
+    const noRemainingTiles = tileCircles.querySelectorAll('.tile').length === 0;
+    const noRemainingFloorTiles = floor.querySelectorAll('.tile').length === 0;
 
-    if (remainingTiles) {
+    if (noRemainingTiles && noRemainingFloorTiles) {
         moveTilesToScoreboardButton.style.display = 'block'; // Show button
     } else {
         moveTilesToScoreboardButton.style.display = 'none'; // Hide button
