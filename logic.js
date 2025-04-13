@@ -55,7 +55,7 @@ function tileGameboardButton() {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
     let freeRow = false;
-    if (triangleGameBoard) {
+    if (triangleGameBoard && selectedTile) {
         for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
             const boardRow = triangleGameBoard.shadowRoot.querySelector(`board-row[row-index="${rowIndex}"]`);
             const boardSquares = boardRow ? boardRow.shadowRoot.querySelectorAll('board-square') : [];
@@ -182,7 +182,7 @@ function getTargetSquare(squares) {
     });
 }
 
-// step 2 of 3 for move tiles to gameboard
+// step 2 of 3 for move tiles to game board
 function moveToGameBoard(tile, tileClass, boardSquares) {
     const playerBoard = document.querySelector(`#${currentPlayer}`);
 
@@ -212,7 +212,7 @@ function moveToGameBoard(tile, tileClass, boardSquares) {
     }
 }
 
-// step 3 of 3 for move tiles to gameboard, move extra to floor
+// step 3 of 3 for move tiles to game board, move extra to floor
 function moveToFloor(tile) {
     const floor = document.querySelector('#floor');
     floor.appendChild(tile);
@@ -366,7 +366,6 @@ export function dealTiles() {
 }
 
 export function startGame() {
-    console.log('start game')
     dealTiles();
     dealTilesButton.style.display = 'block';
     startGameButton.style.display = 'none';
