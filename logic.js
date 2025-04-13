@@ -32,6 +32,48 @@ function updateScoringSection() {
     gameOver.innerHTML = gameState.gameOver;
 }
 
+function calculateScore(scoreBoardSquare, scoreBoardRow, scoreBoardSquares, gridScoreBoard, player) {
+    // Calculate score based on adjacency
+    const row = parseInt(scoreBoardRow.getAttribute('row-index'));
+    const col = Array.from(scoreBoardSquares).indexOf(scoreBoardSquare);
+
+    let horizontalCount = 0;
+    let verticalCount = 0;
+
+    // Count horizontal tiles
+    for (let i = col - 1; i >= 0; i--) {
+        const sq = scoreBoardSquares[i];
+        if (sq.hasAttribute('filled')) horizontalCount++;
+        else break;
+    }
+    for (let i = col + 1; i < 5; i++) {
+        const sq = scoreBoardSquares[i];
+        if (sq.hasAttribute('filled')) horizontalCount++;
+        else break;
+    }
+
+    // Count vertical tiles
+    for (let r = 0; r < 5; r++) {
+        if (r === row) continue;
+        const rowEl = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${r}"]`);
+        if (rowEl) {
+            const square = rowEl.shadowRoot.querySelectorAll('board-square')[col];
+            if (square.hasAttribute('filled')) verticalCount++;
+        }
+    }
+
+    let scoreToAdd = 1;
+    if (horizontalCount > 0) scoreToAdd += horizontalCount;
+    if (verticalCount > 0) scoreToAdd += verticalCount;
+    if (horizontalCount > 0 && verticalCount > 0) scoreToAdd--; // adjust overlap (center gets counted twice)
+
+    if (player === 'player1') {
+        gameState.playerOneScore += scoreToAdd;
+    } else {
+        gameState.playerTwoScore += scoreToAdd;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     updateScoringSection();
 });
@@ -267,6 +309,8 @@ function moveTilesToScoreboard() {
                         if (scoreboardSquareColor === darkLightColorConversion[gameboardSquareColor]) {
                             scoreBoardSquare.style.backgroundColor = `var(--${gameboardSquareColor})`; // Apply dark tile color
                             scoreBoardSquare.setAttribute('filled', 'true'); // Mark as filled
+                            calculateScore(scoreBoardSquare, scoreBoardRow, scoreBoardSquares, gridScoreBoard, player);
+                            updateScoringSection();
                         }
                     });
 
