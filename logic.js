@@ -1,9 +1,12 @@
 const dealTilesButton = document.getElementById('dealTilesButton');
+dealTilesButton.addEventListener('click', dealTiles);
 const moveTilesToScoreboardButton = document.getElementById('moveTilesToScoreboard');
 const moveTilesToGameboardButton = document.getElementById('moveTilesToGameboard');
-dealTilesButton.addEventListener('click', dealTiles);
+const startGameButton = document.getElementById('startGame');
+startGameButton.addEventListener('click', startGame);
 moveTilesToScoreboardButton.addEventListener('click', moveTilesToScoreboard);
-moveTilesToGameboardButton.addEventListener('click', handleMoveTilesToGameboard)
+moveTilesToGameboardButton.addEventListener('click', handleMoveTilesToGameboard);
+const endGameSection = document.getElementById('gameScore');
 let currentPlayer = 'player1'; // Start with player 1
 
 let selectedTile = null; // Track the selected tile
@@ -11,6 +14,27 @@ let selectedTiles = [];
 let selectedRow = null;
 /* Colors of tiles */
 const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
+let gameState = {
+    round: 1,
+    gameOver: false,
+    playerOneScore: 0,
+    playerTwoScore: 0
+};
+
+function updateScoringSection() {
+    const round = endGameSection.querySelector('#round');
+    round.innerHTML = gameState.round;
+    const playerOneScore = endGameSection.querySelector('#playerOneScore');
+    playerOneScore.innerHTML = gameState.playerOneScore;
+    const playerTwoScore = endGameSection.querySelector('#playerTwoScore');
+    playerTwoScore.innerHTML = gameState.playerTwoScore;
+    const gameOver = endGameSection.querySelector('#gameOver');
+    gameOver.innerHTML = gameState.gameOver;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateScoringSection();
+});
 
 function tileScoreboardButton() {
     const tileCircles = document.getElementById('tileCircles');
@@ -257,6 +281,23 @@ function moveTilesToScoreboard() {
         }
     }
 
+    // check if game is over
+    for (let player of players) {
+        const grid = document.querySelector(`#${player} game-board[type="grid"]`);
+        if (grid) {
+            for (let row = 0; row < 5; row++) {
+                const rowEl = grid.shadowRoot.querySelector(`board-row[row-index="${row}"]`);
+                const squares = rowEl.shadowRoot.querySelectorAll('board-square');
+                const filled = Array.from(squares).every(s => s.hasAttribute('filled'));
+                if (filled) {
+                    gameState.gameOver = true; // end condition met
+                    dealTilesButton.style.display = 'none';
+                    startGameButton.style.display = 'block';
+                }
+            }
+        }
+    }
+
     // Hide "Move Tiles to Scoreboard" button after moving
     moveTilesToScoreboardButton.style.display = 'none';
 }
@@ -324,9 +365,12 @@ export function dealTiles() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+export function startGame() {
+    console.log('start game')
     dealTiles();
-})
+    dealTilesButton.style.display = 'block';
+    startGameButton.style.display = 'none';
+}
 
 const TILE_SIZE = 50;
 const TILE_MARGIN = 10;

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Yellow Umbrella</title>
+        <title>Tile Game</title>
         <script type="module" src="logic.js"></script>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -8,6 +8,23 @@
         <header>
             Tile Game
         </header>
+        <div id="gameScore">
+            <div>
+                Scoring Section
+                <div>
+                    Round: <span id="round"></span>
+                </div>
+                <div>
+                    Player One Score: <span id="playerOneScore"></span>
+                </div>
+                <div>
+                    Player Two Score: <span id="playerTwoScore"></span>
+                </div>
+                <div>
+                    Game Over: <span id="gameOver"></span>
+                </div>
+            </div>
+        </div>
         <div id="boards">
             <div id="player1" class="current-turn">
                 <div class="tileAreas">
@@ -27,10 +44,11 @@
         <div id="gameButtons">
             <button id="moveTilesToGameboard" style="display: none;">Move Tiles to Gameboard</button>
             <button id="moveTilesToScoreboard" style="display: none;">Move Tiles to Scoreboard</button>
-            <button id="dealTilesButton">Deal tiles on circles</button>
+            <button id="startGame">Start Game</button>
+            <button id="dealTilesButton" style="display: none;">Deal tiles</button>
         </div>
         <div id="tileCircles"></div>
-        <div id="floorArea">
+        <div id="floorAxrea">
             <div id="floor"></div>
         </div>
     </body>
