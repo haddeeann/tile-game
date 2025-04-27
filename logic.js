@@ -275,6 +275,20 @@ function moveTilesToScoreboard() {
 
     for (let player of players) {
         const playerBoard = document.querySelector(`#${player}`);
+        const overflowBoard = playerBoard.querySelector('overflow-board');
+        if (overflowBoard) {
+            // Get the gameboard row
+            const overflowRow = overflowBoard.shadowRoot.querySelector(`board-row`);
+            const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
+
+            // Check if the row is fully filled and get the color of the tiles
+            Array.from(overflowSquares).forEach(overflowSquare => {
+                overflowSquare.style.backgroundColor = '';
+                overflowSquare.style.borderColor = '';
+                overflowSquare.setAttribute('filled-color', '');
+                overflowSquare.setAttribute('filled', false);
+            });
+        }
         const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
         const gridScoreBoard = playerBoard.querySelector('game-board[type="grid"]');
 
