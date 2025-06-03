@@ -351,6 +351,7 @@ function moveTilesToScoreboard() {
                     gameState.gameOver = true; // end condition met
                     dealTilesButton.style.display = 'none';
                     startGameButton.style.display = 'block';
+                    updateScoringSection();
                 }
             }
         }
