@@ -117,9 +117,7 @@ function tileGameboardButton() {
             })
         }
     }
-    if (selectedTile && selectedRow) {
-        moveTilesToGameboardButton.style.display = 'block';
-    } else if (selectedTile && !freeRow) {
+    if (selectedTile && selectedRow || selectedTile && !freeRow) {
         moveTilesToGameboardButton.style.display = 'block';
     } else {
         moveTilesToGameboardButton.style.display = 'none'; // Hide button
@@ -138,7 +136,7 @@ function handleTileSelection(event) {
     }
 
     // add selected to all the tiles with same colors
-    const tileColor = clickedTile.classList[1]; // todo, don't assume the color is the second class
+    const tileColor = tileColors.find(c => clickedTile.classList.contains(c));
     let tileArea = clickedTile.closest('.circle');
     if (!tileArea) {
         tileArea = clickedTile.closest('#floor')
@@ -285,8 +283,8 @@ function moveTilesToScoreboard() {
             Array.from(overflowSquares).forEach(overflowSquare => {
                 overflowSquare.style.backgroundColor = '';
                 overflowSquare.style.borderColor = '';
-                overflowSquare.setAttribute('filled-color', '');
-                overflowSquare.setAttribute('filled', false);
+                overflowSquare.removeAttribute('filled-color');
+                overflowSquare.removeAttribute('filled');
             });
         }
         const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
