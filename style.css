@@ -177,6 +177,10 @@ button {
 }
 
 .roundDark {
-    border: 1px solid var(--light);
-    background-color: var(--lightest);
+    color: white;
+    border: 1px solid var(--med);
+    background-color: var(--dark-gray);
+}
+#gameOver {
+    padding: .5em;
 }

@@ -15,10 +15,11 @@ let selectedRow = null;
 /* Colors of tiles */
 const tileColors = ['dark-gray', 'dark-tan', 'dark-pink', 'dark-blue', 'dark-yellow'];
 let gameState = {
-    round: 1,
+    round: 0,
     gameOver: false,
     playerOneScore: 0,
-    playerTwoScore: 0
+    playerTwoScore: 0,
+    started: false
 };
 
 function updateScoringSection() {
@@ -29,7 +30,16 @@ function updateScoringSection() {
     const playerTwoScore = endGameSection.querySelector('#playerTwoScore');
     playerTwoScore.innerHTML = gameState.playerTwoScore;
     const gameOver = endGameSection.querySelector('#gameOver');
-    gameOver.innerHTML = gameState.gameOver;
+    if (!gameState.started) {
+        gameOver.innerHTML = 'Click \'Start Game\' to begin';
+    }
+    else {
+        if (!gameState.gameOver) {
+            gameOver.innerHTML = 'Playing';
+        } else {
+            gameOver.innerHTML = 'Game Over';
+        }
+    }
 }
 
 function calculateScore(scoreBoardSquare, scoreBoardRow, scoreBoardSquares, gridScoreBoard, player) {
@@ -420,12 +430,17 @@ export function dealTiles() {
 
         tileCircles.appendChild(circle);
     }
+
+    gameState.round++;
+    updateScoringSection();
 }
 
 export function startGame() {
     dealTiles();
     dealTilesButton.style.display = 'block';
     startGameButton.style.display = 'none';
+    gameState.started = true;
+    updateScoringSection();
 }
 
 const TILE_SIZE = 50;
