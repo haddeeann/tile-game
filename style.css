@@ -24,9 +24,11 @@ body {
 }
 
 header {
-    font-size: 24px;
     text-align: center;
     margin-bottom: 1em;
+}
+h1, h2, h3, h4, h5, h6 {
+    padding: .25em;
 }
 #boards {
     display: flex;
@@ -141,7 +143,34 @@ button {
 
 #gameScore {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    padding-bottom: 1em;
+    border: 2px solid var(--lightest);
+    border-radius: 1em;
+    width: 80%;
+    margin: 0 auto 1em;
+    padding: 1em;
+}
+
+#gameScore .statSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5em;
+}
+
+.round {
+    border-radius: 50%;
+    padding: .5em .75em;
+    font-weight: bold;
+    margin: .25em;
+}
+.roundLight {
+    border: 1px solid var(--light);
+    background-color: var(--lightest);
+}
+
+.roundDark {
+    border: 1px solid var(--light);
+    background-color: var(--lightest);
 }

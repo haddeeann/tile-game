@@ -2,27 +2,30 @@
     <head>
         <title>Tile Game</title>
         <script type="module" src="logic.js"></script>
+        <link rel="stylesheet" href="reset.css">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <header>
-            Tile Game
+            <h1>Tile Game</h1>
+            <div>Strategic tile placement game for two players</div>
         </header>
         <div id="gameScore">
-            <div>
-                Scoring Section
-                <div>
-                    Round: <span id="round"></span>
-                </div>
-                <div>
-                    Player One Score: <span id="playerOneScore"></span>
-                </div>
-                <div>
-                    Player Two Score: <span id="playerTwoScore"></span>
-                </div>
-                <div>
-                    Game Over: <span id="gameOver"></span>
-                </div>
+            <div class="statSection">
+                <div>Round</div>
+                <div id="round" class="round roundLight"></div>
+            </div>
+            <div class="statSection">
+                <div>Player One</div>
+                <div id="playerOneScore" class="round roundLight"></div>
+            </div>
+            <div class="statSection">
+                <div>Player Two</div>
+                <div id="playerTwoScore" class="round roundLight"></div>
+            </div>
+            <div class="statSection">
+                <div>Status</div>
+                <div id="gameOver" class="round roundLight"></div>
             </div>
         </div>
         <div id="boards">
