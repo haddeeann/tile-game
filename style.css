@@ -4,16 +4,22 @@
 /*#f7d9c4*/
 /*#3d405b*/
 :root {
-    --dark-pink: hsl(348.33, 100%, 68%);
-    --pink: hsl(348.33, 100%, 88%);
-    --dark-blue: hsl(186.56, 55.17%, 68%);
-    --blue: hsl(186.56, 55.17%, 88%);
+    /* pink */
+    --dark-pink: hsl(348.33, 100%, 50%);
+    --pink: hsl(348.33, 55.17%, 90%);
+    /* blue */
+    --dark-blue: hsl(186.56, 100%, 50%);
+    --blue: hsl(186.56, 55.17%, 90%);
+    /* yellow */
     --dark-yellow: hsl(35.45, 100%, 50%);
-    --yellow: hsl(35.45, 100%, 88%);
-    --dark-tan: hsl(24.71, 76.12%, 50%);
-    --tan: hsl(24.71, 76.12%, 88%);
+    --yellow: hsl(35.45, 100%, 90%);
+    /* tan */
+    --dark-tan: hsl(24.71, 100%, 50%);
+    --tan: hsl(24.71, 76.12%, 85%);
+    /* light gray */
     --lightest: rgba(61,64,91, 0.05);
     --light: rgba(61,64,91, 0.20);
+    /* dark gray */
     --med: rgba(61,64,91, 0.3);
     --dark-gray: rgb(61,64,91);
 }
