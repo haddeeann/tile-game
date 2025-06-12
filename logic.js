@@ -397,23 +397,17 @@ export function dealTiles() {
 
             const maxPosition = 90;
             const edgeCircle = 25;
-            const minDistance = 40;
+            const minDistance = 10;
 
             let x, y;
-            let isValidPosition = false;
-
-            while(!isValidPosition) {
-                // position randomly within circle
-                x = Math.random() * maxPosition + edgeCircle;
-                y = Math.random() * maxPosition + edgeCircle;
-
-                isValidPosition = positions.every(pos => {
-                    const dx = x - pos.x;
-                    const dy = y- pos.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    return distance >= minDistance;
-                });
-            }
+            positions.every(pos => {
+                const dx = x - pos.x;
+                const dy = y - pos.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance <= minDistance) {
+                    x += 5
+                }
+            })
             positions.push({ x, y })
             tile.classList.add('tile', allTiles[i * 5 + j]); // Assign a one of the randomly ordered color
 
