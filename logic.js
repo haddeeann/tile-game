@@ -370,6 +370,7 @@ function moveTilesToScoreboard() {
 }
 
 export function dealTiles() {
+    console.log('deal')
     // Generate an array with 5 tiles of each color
     let allTiles = [];
     for (let tileColor of tileColors) {
@@ -397,17 +398,21 @@ export function dealTiles() {
 
             const maxPosition = 90;
             const edgeCircle = 25;
-            const minDistance = 10;
+            const minDistance = 40;
 
             let x, y;
+
+            // position randomly within circle
+            x = Math.random() * maxPosition + edgeCircle;
+            y = Math.random() * maxPosition + edgeCircle;
             positions.every(pos => {
                 const dx = x - pos.x;
                 const dy = y - pos.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 if (distance <= minDistance) {
-                    x += 5
+                    x += 15
                 }
-            })
+            });
             positions.push({ x, y })
             tile.classList.add('tile', allTiles[i * 5 + j]); // Assign a one of the randomly ordered color
 
@@ -430,6 +435,7 @@ export function dealTiles() {
 }
 
 export function startGame() {
+    console.log('start')
     dealTiles();
     dealTilesButton.style.display = 'block';
     startGameButton.style.display = 'none';
