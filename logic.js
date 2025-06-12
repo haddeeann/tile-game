@@ -173,13 +173,14 @@ function handleMoveTilesToGameboard() {
         const overflowBoard = playerBoard.querySelector('overflow-board');
         selectedRow = overflowBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
     }
+    const isOverflowRow = selectedRow.closest('overflow-board') !== null;
     const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
     const tileClassToRemove = Array.from(selectedTile.classList).find(className => className !== 'tile');
     let lockedColor = null;
     for (const square of boardSquares) {
         if (square.hasAttribute('filled')) {
             lockedColor = square.getAttribute('filled-color');
-            if (lockedColor !== tileClassToRemove) {
+            if (!isOverflowRow && lockedColor !== tileClassToRemove) {
                 // let user know that they can't put colors that don't match in same row
                 return;
             }
@@ -238,17 +239,6 @@ function moveToGameBoard(tile, tileClass, boardSquares) {
 
     // Try to find an empty square in the game board
     let targetSquare = getTargetSquare(boardSquares);
-
-    // If no empty square is found, try the overflow row
-    if (!targetSquare) {
-        const overflowBoard = playerBoard.querySelector('overflow-board');
-
-        if (overflowBoard) {
-            const overflowRow = overflowBoard.shadowRoot.querySelector('board-row');
-            const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
-            targetSquare = getTargetSquare(overflowSquares);
-        }
-    }
 
     if (targetSquare) {
         // Update the target square to visually represent the tile
