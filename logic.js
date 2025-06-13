@@ -62,13 +62,22 @@ function calculateScore(scoreBoardSquare, scoreBoardRow, scoreBoardSquares, grid
         else break;
     }
 
-    // Count vertical tiles
-    for (let r = 0; r < 5; r++) {
-        if (r === row) continue;
-        const rowEl = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${r}"]`);
+    // count the vertical tiles upwards
+    for (let r = row - 1; r >= 0; r--) {
+        const rowEl = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${r}"]`)
         if (rowEl) {
-            const square = rowEl.shadowRoot.querySelectorAll('board-square')[col];
+            const square = rowEl.shadowRoot.querySelectorAll('board-square')[col]
             if (square.hasAttribute('filled')) verticalCount++;
+            else break;
+        }
+    }
+
+    for (let r = row + 1; r < 5; r++) {
+        const rowEl = gridScoreBoard.shadowRoot.querySelector(`board-row[row-index="${r}"]`)
+        if (rowEl) {
+            const square = rowEl.shadowRoot.querySelectorAll('board-square')[col]
+            if (square.hasAttribute('filled')) verticalCount++;
+            else break;
         }
     }
 
