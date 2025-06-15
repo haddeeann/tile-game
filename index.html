@@ -9,6 +9,7 @@
         <header>
             <h1>Tile Game</h1>
             <div>Strategic tile placement game for two players</div>
+            <button id="howToPlayButton">How to Play</button>
         </header>
         <div id="gameScore">
             <div class="statSection">
@@ -60,5 +61,22 @@
         <div id="floorAxrea">
             <div id="floor"></div>
         </div>
+        <div id="howToPlayModal" class="modal hidden">
+            <div class="modal-content">
+                <button class="close">&times;</button>
+                <h2>How to Play</h2>
+                <ol>
+                    <li> Click on the tiles from the circle areas and place them on the player board.</li>
+                    <li> Tiles can only be placed on rows of like colors.</li>
+                    <li> The exception is the overflow board where any colors can be placed.</li>
+                    <li> Once all the tiles are placed you can play the next round.</li>
+                    <li> Filled rows let you move a tile to the scoreboard during the 'move tiles to scoreboard process'.</li>
+                    <li> Each single tile placed on the scoreboard is worth 1 point. Additional points are given when a tile is placed and there are adjacent tiles to the placed tile.</li>
+                    <li> Game ends when a row is filled in the scoreboard.</li>
+                </ol>
+                <p>Highest score wins. Take turns and have fun!</p>
+            </div>
+        </div>
+
     </body>
 </html>

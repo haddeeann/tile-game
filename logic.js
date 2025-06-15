@@ -677,3 +677,18 @@ customElements.define('game-board', GameBoard);
 customElements.define('board-row', BoardRow);
 customElements.define('board-square', BoardSquare);
 customElements.define('overflow-board', OverflowBoard);
+
+document.getElementById('howToPlayButton').addEventListener('click', () => {
+    document.getElementById('howToPlayModal').classList.remove('hidden');
+});
+
+document.querySelector('#howToPlayModal .close').addEventListener('click', () => {
+    document.getElementById('howToPlayModal').classList.add('hidden');
+});
+
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('howToPlayModal');
+    if (event.target === modal) {
+        modal.classList.add('hidden');
+    }
+});
