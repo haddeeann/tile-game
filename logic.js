@@ -175,23 +175,27 @@ function handleTileSelection(event) {
 
 // step 1 of 3 for move tiles to gameboard
 function handleMoveTilesToGameboard() {
+    let isOverflowRow = false;
     const playerBoard = document.querySelector(`#${currentPlayer}`);
     const triangleGameBoard = playerBoard.querySelector('game-board[type="triangle"]');
     selectedRow = triangleGameBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
     if (!selectedRow) {
         const overflowBoard = playerBoard.querySelector('overflow-board');
         selectedRow = overflowBoard.shadowRoot.querySelector(`board-row[class="selected"]`);
+        isOverflowRow = true;
     }
-    const isOverflowRow = selectedRow.closest('overflow-board') !== null;
+
     const boardSquares = selectedRow ? selectedRow.shadowRoot.querySelectorAll('board-square') : [];
     const tileClassToRemove = Array.from(selectedTile.classList).find(className => className !== 'tile');
     let lockedColor = null;
-    for (const square of boardSquares) {
-        if (square.hasAttribute('filled')) {
-            lockedColor = square.getAttribute('filled-color');
-            if (!isOverflowRow && lockedColor !== tileClassToRemove) {
-                // let user know that they can't put colors that don't match in same row
-                return;
+    if (!isOverflowRow) {
+        for (const square of boardSquares) {
+            if (square.hasAttribute('filled')) {
+                lockedColor = square.getAttribute('filled-color');
+                if (lockedColor !== tileClassToRemove) {
+                    // let user know that they can't put colors that don't match in same row
+                    return;
+                }
             }
         }
     }
@@ -235,8 +239,23 @@ function handleMoveTilesToGameboard() {
     tileScoreboardButton();
 }
 
-function getTargetSquare(squares) {
-    return Array.from(squares).reverse().find(square => {
+function getTargetSquare(squares, allowOverflow = true) {
+    // 1. Try to find an empty square in the given row
+    const target = Array.from(squares).reverse().find(square => {
+        const shadowChildren = Array.from(square.shadowRoot.children);
+        return !square.hasAttribute('filled') && shadowChildren.every(child => !child.classList.contains('tile'));
+    });
+
+    if (target || !allowOverflow) return target;
+
+    // 2. If no empty square found and overflow is allowed, try the overflow row
+    const playerBoard = document.querySelector(`#${currentPlayer}`);
+    const overflowBoard = playerBoard.querySelector('overflow-board');
+
+    const overflowRow = overflowBoard.shadowRoot.querySelector('board-row');
+    const overflowSquares = overflowRow ? overflowRow.shadowRoot.querySelectorAll('board-square') : [];
+
+    return Array.from(overflowSquares).reverse().find(square => {
         const shadowChildren = Array.from(square.shadowRoot.children);
         return !square.hasAttribute('filled') && shadowChildren.every(child => !child.classList.contains('tile'));
     });
