@@ -17,7 +17,7 @@
     --dark-tan: hsl(24.71, 100%, 50%);
     --tan: hsl(24.71, 76.12%, 85%);
     /* light gray */
-    --lightest: rgba(61,64,91, 0.05);
+    --lightest: rgba(61,64,91, 0.1);
     --light: rgba(61,64,91, 0.20);
     /* dark gray */
     --med: rgba(61,64,91, 0.3);
@@ -82,20 +82,59 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     opacity: .95;
 }
+/* pink tile and pattern dots */
 .dark-pink {
     background-color: var(--dark-pink);
 }
+.dark-pink.tile::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 25% 25%, white 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, white 2px, transparent 2px);
+    background-size: 16px 16px;
+    border-radius: inherit;
+}
+/* blue tile stripes */
 .dark-blue {
     background-color: var(--dark-blue);
 }
+.dark-blue.tile {
+    background: repeating-linear-gradient(45deg, var(--dark-blue), white 4px, var(--dark-blue) 4px, var(--dark-blue) 8px);
+}
+/* dark yellow stripes */
 .dark-yellow {
     background-color: var(--dark-yellow);
 }
+.dark-yellow.tile {
+    background: repeating-linear-gradient(45deg, var(--dark-yellow), white 4px, var(--dark-yellow) 4px, var(--dark-yellow) 8px);
+}
+/* dark tan patterns grid */
 .dark-tan {
     background-color: var(--dark-tan);
 }
+.dark-tan.tile {
+    background-color: var(--dark-tan);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 8px 8px;
+}
+/* dark gray patterns waves */
 .dark-gray {
     background-color: var(--dark-gray);
+}
+.dark-gray.tile {
+    background-color: var(--dark-gray);
+    background-image: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.3) 2px,
+            rgba(255, 255, 255, 0.3) 4px
+    );
 }
 
 #gameButtons {
