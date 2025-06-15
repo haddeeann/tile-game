@@ -31,7 +31,7 @@ function updateScoringSection() {
     playerTwoScore.innerHTML = gameState.playerTwoScore;
     const gameOver = endGameSection.querySelector('#gameOver');
     if (!gameState.started) {
-        gameOver.innerHTML = 'Click \'Start Game\' to begin';
+        gameOver.innerHTML = 'Ready';
     }
     else {
         if (!gameState.gameOver) {
