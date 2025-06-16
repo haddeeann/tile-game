@@ -263,20 +263,21 @@ function getTargetSquare(squares, allowOverflow = true) {
 
 // step 2 of 3 for move tiles to game board
 function moveToGameBoard(tile, tileClass, boardSquares) {
-    const playerBoard = document.querySelector(`#${currentPlayer}`);
-
     // Try to find an empty square in the game board
     let targetSquare = getTargetSquare(boardSquares);
 
     if (targetSquare) {
         // Update the target square to visually represent the tile
-        const tileColor = tile.classList[1]; // Todo: test, don't assume, Assuming the tile color is the second class
-        targetSquare.style.backgroundColor = getComputedStyle(tile).backgroundColor;
-        targetSquare.style.borderColor = getComputedStyle(tile).borderColor;
+        const tileClassList = Array.from(tile.classList).filter(cls => cls !== 'selected');
+        const tileDiv = targetSquare.shadowRoot.querySelector('.tile-display');
+
+        // Clear old classes
+        tileDiv.className = 'tile-display';
+        tileClassList.forEach(cls => tileDiv.classList.add(cls));
 
         // Mark the square as "filled" to prevent future updates
         targetSquare.setAttribute('filled', 'true');
-        targetSquare.setAttribute('filled-color', tileColor);
+        targetSquare.setAttribute('filled-color', tileClass);
     }
 }
 
@@ -309,8 +310,10 @@ function moveTilesToScoreboard() {
 
             // Check if the row is fully filled and get the color of the tiles
             Array.from(overflowSquares).forEach(overflowSquare => {
-                overflowSquare.style.backgroundColor = '';
-                overflowSquare.style.borderColor = '';
+                const tileDiv = overflowSquare.shadowRoot.querySelector('.tile-display');
+                if (tileDiv) {
+                    tileDiv.className = 'tile-display'; // Reset tile styles
+                }
                 overflowSquare.removeAttribute('filled-color');
                 overflowSquare.removeAttribute('filled');
             });
@@ -347,8 +350,13 @@ function moveTilesToScoreboard() {
                     Array.from(scoreBoardSquares).forEach(scoreBoardSquare => {
                         const scoreboardSquareColor = scoreBoardSquare.getAttribute('gridcolor');
                         if (scoreboardSquareColor === darkLightColorConversion[gameboardSquareColor]) {
-                            scoreBoardSquare.style.backgroundColor = `var(--${gameboardSquareColor})`; // Apply dark tile color
-                            scoreBoardSquare.setAttribute('filled', 'true'); // Mark as filled
+                            // Apply the full tile style using the class
+                            const tileDiv = scoreBoardSquare.shadowRoot.querySelector('.tile-display');
+                            tileDiv.className = 'tile-display'; // reset first
+                            tileDiv.classList.add('tile', gameboardSquareColor); // e.g. 'tile', 'dark-pink'
+
+                            // Mark as filled
+                            scoreBoardSquare.setAttribute('filled', 'true');
                             calculateScore(scoreBoardSquare, scoreBoardRow, scoreBoardSquares, gridScoreBoard, player);
                             updateScoringSection();
                         }
@@ -356,7 +364,8 @@ function moveTilesToScoreboard() {
 
                     // **Clear the gameboard row after moving tiles**
                     Array.from(gameboardSquares).forEach(gameboardSquare => {
-                        gameboardSquare.style.backgroundColor = 'var(--light)'; // Reset background color
+                        const tileDiv = gameboardSquare.shadowRoot.querySelector('.tile-display');
+                        tileDiv.className = 'tile-display'; // remove tile classes
                         gameboardSquare.removeAttribute('filled'); // Remove 'filled' attribute
                         gameboardSquare.removeAttribute('filled-color'); // Remove color reference
                     });
@@ -388,7 +397,6 @@ function moveTilesToScoreboard() {
 }
 
 export function dealTiles() {
-    console.log('deal')
     // Generate an array with 5 tiles of each color
     let allTiles = [];
     for (let tileColor of tileColors) {
@@ -453,7 +461,6 @@ export function dealTiles() {
 }
 
 export function startGame() {
-    console.log('start')
     dealTiles();
     dealTilesButton.style.display = 'block';
     startGameButton.style.display = 'none';
@@ -600,6 +607,63 @@ class BoardRow extends HTMLElement {
     }
 }
 
+
+const tileStyles = `
+<style>
+/* pink tile and pattern dots */
+.dark-pink {
+    background-color: var(--dark-pink);
+}
+.tile-display.dark-pink.tile::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle at 25% 25%, white 2px, transparent 2px),
+                      radial-gradient(circle at 75% 75%, white 2px, transparent 2px);
+    background-size: 16px 16px;
+    border-radius: inherit;
+}
+/* blue tile stripes */
+.dark-blue {
+    background-color: var(--dark-blue);
+}
+.tile-display.dark-blue.tile {
+    background: repeating-linear-gradient(45deg, var(--dark-blue), white 4px, var(--dark-blue) 4px, var(--dark-blue) 8px);
+}
+/* dark yellow stripes */
+.dark-yellow {
+    background-color: var(--dark-yellow);
+}
+.tile-display.dark-yellow.tile {
+    background: repeating-linear-gradient(45deg, var(--dark-yellow), white 4px, var(--dark-yellow) 4px, var(--dark-yellow) 8px);
+}
+/* dark tan patterns grid */
+.dark-tan {
+    background-color: var(--dark-tan);
+}
+.tile-display.dark-tan.tile {
+    background-color: var(--dark-tan);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 8px 8px;
+}
+/* dark gray patterns waves */
+.dark-gray {
+    background-color: var(--dark-gray);
+}
+.tile-display.dark-gray.tile {
+    background-color: var(--dark-gray);
+    background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.3) 2px,
+        rgba(255, 255, 255, 0.3) 4px
+    );
+}
+</style>
+`;
+
 class BoardSquare extends HTMLElement {
     constructor() {
         super();
@@ -627,7 +691,14 @@ class BoardSquare extends HTMLElement {
                 :host(:last-child) {
                     margin-right: 0;
                 }
+                .tile-display {
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                }
             </style>
+            ${tileStyles}
+            <div class="tile-display"></div>
         `;
 
         this.shadowRoot.appendChild(template.content.cloneNode(true));
