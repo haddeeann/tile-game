@@ -716,17 +716,19 @@ class OverflowBoard extends HTMLElement {
             <style>
                 :host {
                     width: 100%;
-                    height: 50px;
+                    height: 75px;
                     background-color: var(--lightest);
                     display: block;
                     padding-top: 10px;
                     padding-bottom: 10px;
+                    padding-left: 10px;
                 }
                 .overflow-container {
                     display: flex;
                     gap: ${TILE_MARGIN}px;
                 }
             </style>
+            <div style="padding-bottom: 5px;">Overflow</div>
             <div class="overflow-container"></div>
         `;
 
