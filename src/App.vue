@@ -11,6 +11,7 @@ const history = ref<GameState[]>([])
 const toast = ref('')
 const showRules = ref(false)
 const showSettings = ref(false)
+const gameOverDismissed = ref(false)
 const isBotActing = ref(false)
 const displayPlayerOverride = ref<0 | 1 | null>(null)
 const animatedPlacementId = ref<string | null>(null)
@@ -161,9 +162,17 @@ function undo() {
 function newGame() {
   if (!window.confirm('Start a fresh garden? This game will be replaced.')) return
   history.value = []
+  gameOverDismissed.value = false
   state.value = createInitialState()
   syncDisplayedScores()
   showSettings.value = false
+}
+
+function restartGame() {
+  history.value = []
+  gameOverDismissed.value = false
+  state.value = createInitialState()
+  syncDisplayedScores()
 }
 
 function patchStyle(patch: Patch | null) {
@@ -373,11 +382,12 @@ function playerStatus(playerId: 0 | 1) {
       </section>
     </div>
 
-    <div v-if="state.status === 'finished'" class="modal-backdrop game-over">
+    <div v-if="state.status === 'finished' && !gameOverDismissed" class="modal-backdrop game-over">
       <section class="modal finish-modal" role="dialog" aria-modal="true">
+        <button class="modal-close finish-close" aria-label="Close results and view the finished boards" title="View finished boards" @click="gameOverDismissed = true">×</button>
         <span class="finish-flower">✿</span><p class="eyebrow">The final stitch</p><h2>{{ winner ? `${winner.name}'s garden blooms brightest!` : 'A perfectly tied garden!' }}</h2>
         <p>{{ state.players[0].name }} {{ totalScore(state.players[0]) }} · {{ state.players[1].name }} {{ totalScore(state.players[1]) }}</p>
-        <button class="new-game" @click="state = createInitialState(); history = []">Plant a new garden</button>
+        <button class="new-game" @click="restartGame">Plant a new garden</button>
       </section>
     </div>
   </div>
