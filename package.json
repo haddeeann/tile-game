@@ -1,17 +1,21 @@
 {
-  "name": "tile-game",
-  "version": "1.0.0",
+  "name": "patchwork-garden",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "test": "vitest run"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vue": "^3.5.21",
+    "vue-tsc": "^3.0.6"
+  },
   "devDependencies": {
-    "@parcel/packager-raw-url": "^2.15.2",
-    "@parcel/transformer-webmanifest": "^2.15.2",
-    "parcel": "^2.15.2"
+    "vitest": "^3.2.4"
   }
 }
