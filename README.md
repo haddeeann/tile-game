@@ -1,8 +1,8 @@
 # Patchwork Garden
 
-Patchwork Garden is a cozy, two-player tile-placement game about sewing a garden quilt across six seasons. Players draft patterned fabric, arrange it on personal 5×5 boards, and pursue a changing mix of quests and ribbon bonuses.
+Patchwork Garden is a cozy tile-placement game about sewing a garden quilt across six seasons. You and Rowan, a bot opponent, draft patterned fabric, arrange it on personal 5×5 boards, and pursue a changing mix of quests and ribbon bonuses.
 
-The game is built for local hot-seat play and runs entirely in the browser. Progress is saved automatically.
+The game runs entirely in the browser. Rowan automatically chooses a move with greedy one-ply lookahead, scoring every legal placement through the same rules engine used by the player. Progress is saved automatically.
 
 ## Gameplay
 
@@ -44,7 +44,7 @@ applyMove(state, move) -> { state, error? }
 - Unit tests without a browser
 - Future replay or multiplayer synchronization
 
-Vue is responsible only for rendering the current state and dispatching player moves.
+Vue is responsible only for rendering the current state and dispatching moves. Human input and the bot are separate move sources; both use the same `applyMove` validation and state-transition path.
 
 ## Tech stack
 
@@ -93,6 +93,8 @@ src/
 ├── main.ts                 Vue application entry point
 ├── style.css               Responsive cottage-core visual system
 └── game/
+    ├── bot.ts              Greedy one-ply opponent move selection
+    ├── bot.test.ts         Bot strategy and move-source coverage
     ├── catalog.ts          Patch, quest, and ribbon definitions
     ├── engine.ts           Pure state transitions and scoring rules
     ├── engine.test.ts      Vitest rules-engine coverage
